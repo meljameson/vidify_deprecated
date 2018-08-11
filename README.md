@@ -1,6 +1,6 @@
 Build with docker
 
-docker container run -it -v $(pwd):/app react:app build
+docker container run -it -v $(pwd):/app vidify:<tag> build
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
