@@ -1,0 +1,7 @@
+html, body, #root {
+  height: 100%;
+  font-family: sans-serif;
+  background-color: black;
+  margin: 0;
+  padding: 0;
+}
