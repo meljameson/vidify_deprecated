@@ -1,0 +1,21 @@
+{
+  "name": "playlist-tv",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "https://mjameson.gitlab.io/vidify",
+  "proxy": "http://localhost:4000",
+  "dependencies": {
+    "concurrently": "^3.6.1",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
+    "dotenv": "^6.0.0",
+    "nodemon": "^1.18.3",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "1.1.4"
+  },
+  "scripts": {
+    "start": "nodemon server.js"
+  }
+}
