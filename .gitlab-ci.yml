@@ -1,21 +1,21 @@
-image: node:10.8.0
+image: node:latest
 
-cache:
-  paths:
-    - node_modules/
-
-before_script:
-  - npm install
-  
 pages:
+  cache:
+    paths:
+    - node_modules/
+ 
   stage: deploy
+  
   script:
-  - npm install
-  - npm run build
-  - rm -rf public
-  - mv build public
+    - npm install
+    - npm run build
+    - rm -rf public
+    - mv build public
+
   artifacts:
     paths:
     - public
+    
   only:
   - master
