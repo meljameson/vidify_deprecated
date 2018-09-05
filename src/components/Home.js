@@ -30,10 +30,6 @@ color: white;
 /* TODO: Style rows */
 `
 
-const Media = styled.div`
- /* TODO: Show album covers next to playlists */
-`
-
 class Home extends Component {
   constructor(props) {
     super(props)
@@ -81,9 +77,11 @@ class Home extends Component {
   getToken = () => {
     let hashParams = {}
     let e, r = /([^&;=]+)=?([^&;]*)/g,
-      q = window.location.hash.substring(1);
-    while (e = r.exec(q)) {
+      q = window.location.hash.substring(1)
+    e = r.exec(q)
+    while (e) {
       hashParams[e[1]] = decodeURIComponent(e[2])
+      e = r.exec(q)
     }
     const { access_token } = hashParams
     return access_token
