@@ -1,104 +1,58 @@
 import React, { Component } from 'react'
 import { AppWrapper, PlayerWrapper, Playlist, Row } from '../styled'
-import SpotifyApi from '../spotify'
 import Player from './Player'
-import { buildQuery, buildParams } from '../utils'
-import LoadingIcon from './LoadingIcon'
+import { authorize, getToken } from '../utils'
 import { connect } from 'react-redux'
-import { fetchSongs, fetchPlaylists, fetchVideos } from '../actions'
-import { selectSongs, selectPlaylists, selectVideos } from '../selectors'
+import { fetchSongs, fetchPlaylists, fetchVideos, fetchUser, setToken } from '../actions'
+import { selectSongs, selectPlaylists, selectVideos, selectUser, selectToken, selectCurrentVideo } from '../selectors'
+import Login from './Login'
 
 class Home extends Component {
-  state = {
-    currentVideo: null,
-    currentPlaylist: null,
-    showSongs: false,
-    videoIds: [],
-    playlists: {
-      total: null,
-      next: null,
-      items: null
-    },
-    songs: {
-      total: null,
-      next: null,
-      items: null
-    }
-  }
-
-  async componentWillMount() {
-    await SpotifyApi.init()
-    this.loadPlaylists()
+  componentWillMount() {
+    const { token, setToken } = this.props
+    if (!token) setToken(getToken())
   }
 
   componentDidUpdate() {
-    const { songs, videoIds } = this.state
-    if (songs.items && this.state.showSongs && !videoIds.length) {
-      this.loadVideos(songs.items)
-    }
+    const { songs, videos, user, fetchUser, fetchVideos, token, fetchPlaylists, playlists } = this.props
+    if (!user && token) fetchUser(token)
+    if (token && user && !playlists) fetchPlaylists(user, token)
+    if (songs && !videos.length) fetchVideos(songs)
   }
 
-  async loadPlaylists() {
-    const { total, next, items } = await SpotifyApi.fetchPlaylists()
-    this.setState({ playlists: { total, next, items } })
-  }
-
-  async loadSongs(id) { // load the first 20
-    const { total, next, items } = await SpotifyApi.fetchSongs(id)
-    this.setState({ songs: { total, next, items }, showSongs: true }) // route to songs, deduce state from url
-  }
-
-  async loadVideos(songs) {
-    if (!songs) return
-    const songUrls = songs.map(({ track: { name, artists, album: { name: album } } }) => {
-      let query = buildQuery(buildParams(`${name} ${artists.map(({ name }) => name).join(' ')} ${album}`))
-      return 'https://www.googleapis.com/youtube/v3/search?' + query
-    })
-    const videos = await Promise.all(songUrls.map(song => fetch(song)))
-    const json = await Promise.all(videos.map(song => song.json()))
-    const videoIds = json.map(({ items }) => items[0].id.videoId)
-    this.setState({ currentVideo: videoIds[0], videoIds }, () => this.state.currentVideo)
-  }
-
-  renderSongs = ({ items }) => items.map(({ track: { name, id, artists, album: { name: album } } }) => (
-    <Row
-      key={id}
-    >
-      {
-        `${name} by ${artists.map(({ name }) => name)}`
-      }
+  renderSongs = items => items.map(({ name, id, artists, album }) => (
+    <Row key={id} >
+      {`${name} by ${artists.map(({ name }) => name)}`}
     </Row>
   ))
 
-  renderPlaylists = ({ items }) => items.map(({ external_urls, images, name, id }) => (
+  renderPlaylists = playlists => (playlists.map(({ name, image, id, total }) => (
     <Row
       key={id}
       onClick={() => {
-        this.setState({ currentPlaylist: id })
-        this.loadSongs(id)
+        this.props.fetchSongs(this.props.userId, this.props.token, id)
       }}
     >
-      {name}
+      <img style={{ height: '3rem', width: '3rem' }} src={image} /> {/* TODO: style */}
+      {name} ({total})
     </Row>
-  ))
+  )))
 
 
   render() {
-    const { playlists, songs, showSongs, currentVideo } = this.state
+    const { playlists, songs, user, selectedVideo } = this.props
 
     return (
-      <AppWrapper>
-        <PlayerWrapper>
-          <Player currentVideo={currentVideo} />
-        </PlayerWrapper>
-        <Playlist>
-          {
-            showSongs ?
-              this.renderSongs(songs)
-              : playlists.items && this.renderPlaylists(playlists)
-          }
-        </Playlist>
-      </AppWrapper>
+      user ?
+        (<AppWrapper>
+          <PlayerWrapper>
+            <Player selectedVideo={selectedVideo} />
+          </PlayerWrapper>
+          <Playlist>
+            {(songs && this.renderSongs(songs)) || (playlists && this.renderPlaylists(playlists))}
+          </Playlist>
+        </AppWrapper>) :
+        <Login onClick={authorize}>Log in to load Spotify playlists</Login>
     )
   }
 }
@@ -106,7 +60,10 @@ class Home extends Component {
 const mapStateToProps = state => ({
   songs: selectSongs(state),
   playlists: selectPlaylists(state),
-  videos: selectVideos(state)
+  videos: selectVideos(state),
+  user: selectUser(state),
+  token: selectToken(state),
+  selectedVideo: selectCurrentVideo(state)
 })
 
-export default connect(mapStateToProps, { fetchPlaylists, fetchSongs, fetchVideos })(Home)
+export default connect(mapStateToProps, { fetchPlaylists, fetchSongs, fetchVideos, fetchUser, setToken })(Home)

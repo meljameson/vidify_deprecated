@@ -14,8 +14,8 @@ class Player extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.currentVideo !== this.props.currentVideo) {
-      this.state.player.load(this.props.currentVideo)
+    if (prevProps.selectedVideo !== this.props.selectedVideo) {
+      this.state.player.load(this.props.selectedVideo)
     }
   }
 

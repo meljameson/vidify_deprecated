@@ -2,7 +2,8 @@ import {
   FETCH_PLAYLISTS,
   FETCH_SONGS,
   FETCH_VIDEOS,
-  FETCH_USER
+  FETCH_USER,
+  SET_TOKEN
 } from './actions'
 
 const initialState = {
@@ -13,21 +14,25 @@ const initialState = {
 
 function reducer(state = initialState, action) {
   switch (action.type) {
-    case FETCH_PLAYLISTS:
+    case SET_TOKEN:
       return Object.assign({}, state, {
-        playlists: action.payload
+        token: action.payload.token
       })
-    case FETCH_SONGS:
+    case FETCH_PLAYLISTS.SUCCESS:
       return Object.assign({}, state, {
-        songs: action.payload
+        playlists: action.payload.playlists
       })
-    case FETCH_VIDEOS:
+    case FETCH_SONGS.SUCCESS:
       return Object.assign({}, state, {
-        videos: action.payload
+        songs: action.payload.songs
       })
-    case FETCH_USER:
+    case FETCH_VIDEOS.SUCCESS:
       return Object.assign({}, state, {
-        userId: action.payload
+        videos: action.payload.videos
+      })
+    case FETCH_USER.SUCCESS:
+      return Object.assign({}, state, {
+        user: action.payload.id
       })
     default:
       return state

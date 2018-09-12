@@ -1,99 +1,116 @@
-export const FETCH_PLAYLISTS = 'FETCH_PLAYLISTS'
-export const FETCH_SONGS = 'FETCH_SONGS'
-export const FETCH_VIDEOS = 'FETCH_VIDEOS'
-export const FETCH_USER = 'FETCH_USER'
+import { buildQuery, buildParams, createActionTypes, authorize } from './utils'
+
+export const FETCH_PLAYLISTS = createActionTypes('FETCH_PLAYLISTS')
+export const FETCH_SONGS = createActionTypes('FETCH_SONGS')
+export const FETCH_VIDEOS = createActionTypes('FETCH_VIDEOS')
+export const FETCH_USER = createActionTypes('FETCH_USER')
+export const SET_TOKEN = 'SET_TOKEN'
 
 const loadPlaylistsActions = {
-  request: () => {},
-  success: () => {},
-  failure: () => {}
+  request: id => ({ type: FETCH_PLAYLISTS.REQUEST, payload: id }),
+  success: data => ({ type: FETCH_PLAYLISTS.SUCCESS, payload: data }),
+  failure: error => ({ type: FETCH_PLAYLISTS.FAILURE, payload: error })
 }
 
 const loadSongsActions = {
-  request: () => {},
-  success: () => {},
-  failure: () => {}
+  request: id => ({ type: FETCH_SONGS.REQUEST, payload: id }),
+  success: data => ({ type: FETCH_SONGS.SUCCESS, payload: data }),
+  failure: error => ({ type: FETCH_SONGS.FAILURE, payload: error })
 }
 
 const loadVideosActions = {
-  request: () => {},
-  success: () => {},
-  failure: () => {}
+  request: id => ({ type: FETCH_VIDEOS.REQUEST, payload: id }),
+  success: data => ({ type: FETCH_VIDEOS.SUCCESS, payload: data }),
+  failure: error => ({ type: FETCH_VIDEOS.FAILURE, payload: error })
 }
 
 const loadUserActions = {
-  request: () => {},
-  success: () => {},
-  failure: () => {}
+  request: id => ({ type: FETCH_USER.REQUEST, payload: id }),
+  success: data => ({ type: FETCH_USER.SUCCESS, payload: data }),
+  failure: error => ({ type: FETCH_USER.FAILURE, payload: error })
 }
 
-export const fetchPlaylists = () => async dispatch => {
-  dispatch(loadPlaylistsActions.request)
+export const fetchPlaylists = (userId, token) => async dispatch => {
+  const req = new Request(`https://api.spotify.com/v1/users/${userId}/playlists`, { // TODO: add auth header in proxy
+    headers: new Headers({
+      'Authorization': 'Bearer ' + token
+    })
+  })
 
-  // const req = new Request(`https://api.spotify.com/v1/users/${userId}/playlists`, {
-  //   headers: new Headers({
-  //     'Authorization': 'Bearer ' + token
-  //   })
-  // })
-
-  // try {
-  //   const res = await fetch(req)
-  //   const playlists = res.statusText === "Unauthorized" ? authorize() : await res.json()
-  //   return playlists
-  // } catch (err) {
-  //   console.error(err)
-  // }
-
-  dispatch(loadPlaylistsActions.success)
-  dispatch(loadPlaylistsActions.failure)
+  try {
+    const res = await fetch(req)
+    const { total, next, items, error } = await res.json()
+    if (error) { // TODO: check for actual authentication error
+      authorize()
+    } else {
+      const playlists = items.map(({ id, images, name, tracks: { total } }) => ({ id, image: images.pop().url, name, total }))
+      dispatch(loadPlaylistsActions.success({ playlists: { items: playlists, total, next } }))
+    }
+  } catch (err) {
+    console.error(err)
+  }
 }
 
-export const fetchSongs = () => async dispatch => {
-  dispatch(loadSongsActions.request)
+export const fetchSongs = (userId, token, playlistId) => async dispatch => {
+  const req = new Request(`https://api.spotify.com/v1/users/${userId}/playlists/${playlistId}/tracks`, {
+    headers: new Headers({
+      'Authorization': 'Bearer ' + token
+    })
+  })
 
-  // const req = new Request(`https://api.spotify.com/v1/users/${userId}/playlists/${playlistId}/tracks`, {
-  //   headers: new Headers({
-  //     'Authorization': 'Bearer ' + token
-  //   })
-  // })
-
-  // try {
-  //   const res = await fetch(req)
-  //   const songs = res.statusText === "Unauthorized" ? authorize() : await res.json()
-  //   return songs
-  // } catch (err) {
-  //   console.error(err)
-  // }
-  
-  dispatch(loadSongsActions.success)
-  dispatch(loadSongsActions.failure)
+  try {
+    const res = await fetch(req)
+    const { total, next, items, error } = await res.json()
+    if (error) {
+      authorize()
+    } else {
+      const songs = items.map(({ track: { id, name, artists, album: { images, name: album } } }) => ({ id, name, artists, images, name }))
+      dispatch(loadSongsActions.success({ songs: { items: songs, total, next } }))
+    }
+  } catch (err) {
+    console.error(err)
+  }
 }
 
-export const fetchVideos = urls => async dispatch => {
-  dispatch(loadVideosActions.request)
-
-  // const videos = await Promise.all(songUrls.map(song => fetch(song)))
-  // const json = await Promise.all(videos.map(song => song.json()))
-  // const videoIds = json.map(({ items }) => items[0].id.videoId)
-
-  dispatch(loadVideosActions.success)
-  dispatch(loadVideosActions.failure)
+export const fetchVideos = songs => async dispatch => {
+  const songUrls = songs.map(({ name, artists, album }) => {
+    let search = `${name && name} ${artists.map(({ name }) => name).filter(name => name).join(' ')} ${album && album}`
+    let query = buildQuery(buildParams(search))
+    return 'https://www.googleapis.com/youtube/v3/search?' + query
+  })
+  try {
+    const res = await Promise.all(songUrls.map(song => fetch(song)))
+    const json = await Promise.all(res.map(song => song.json()))
+    const videos = json.map(({ items }) => {
+      if (items.length) return items.pop().id.videoId
+    }).filter(item => item)
+    dispatch(loadVideosActions.success({ videos }))
+  } catch (err) {
+    dispatch(loadVideosActions.failure(err))
+  }
 }
 
-export const fetchUser = () => async dispatch => {
+export const fetchUser = (token) => async dispatch => {
   dispatch(loadUserActions.request)
 
-  // const req = new Request('https://api.spotify.com/v1/me', {
-  //   headers: new Headers({
-  //     'Authorization': 'Bearer ' + token
-  //   })
-  // })
+  const req = new Request('https://api.spotify.com/v1/me', {
+    headers: new Headers({
+      'Authorization': 'Bearer ' + token
+    })
+  })
 
-
-  // const res = await fetch(req)
-  // const { id } = res.statusText === "Unauthorized" ? authorize() : await res.json()
-  // userId = id
-
-  dispatch(loadUserActions.success)
-  dispatch(loadUserActions.failure)
+  try {
+    const res = await fetch(req)
+    const { id, error } = await res.json()
+    if (error) {
+      console.log(error)
+      authorize()
+    } else {
+      dispatch(loadUserActions.success({ id }))
+    }
+  } catch (err) {
+    dispatch(loadUserActions.failure(err))
+  }
 }
+
+export const setToken = token => dispatch => dispatch({ type: 'SET_TOKEN', payload: { token } })
