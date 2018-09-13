@@ -2,7 +2,7 @@ import { buildQuery, buildParams, createActionTypes, authorize } from './utils'
 
 export const FETCH_PLAYLISTS = createActionTypes('FETCH_PLAYLISTS')
 export const FETCH_SONGS = createActionTypes('FETCH_SONGS')
-export const FETCH_VIDEOS = createActionTypes('FETCH_VIDEOS')
+export const FETCH_VIDEO = createActionTypes('FETCH_VIDEO')
 export const FETCH_USER = createActionTypes('FETCH_USER')
 export const SET_TOKEN = 'SET_TOKEN'
 
@@ -18,10 +18,10 @@ const loadSongsActions = {
   failure: error => ({ type: FETCH_SONGS.FAILURE, payload: error })
 }
 
-const loadVideosActions = {
-  request: id => ({ type: FETCH_VIDEOS.REQUEST, payload: id }),
-  success: data => ({ type: FETCH_VIDEOS.SUCCESS, payload: data }),
-  failure: error => ({ type: FETCH_VIDEOS.FAILURE, payload: error })
+const loadVideoActions = {
+  request: id => ({ type: FETCH_VIDEO.REQUEST, payload: id }),
+  success: data => ({ type: FETCH_VIDEO.SUCCESS, payload: data }),
+  failure: error => ({ type: FETCH_VIDEO.FAILURE, payload: error })
 }
 
 const loadUserActions = {
@@ -72,21 +72,16 @@ export const fetchSongs = (userId, token, playlistId) => async dispatch => {
   }
 }
 
-export const fetchVideos = songs => async dispatch => {
-  const songUrls = songs.map(({ name, artists, album }) => {
-    let search = `${name && name} ${artists.map(({ name }) => name).filter(name => name).join(' ')} ${album && album}`
-    let query = buildQuery(buildParams(search))
-    return 'https://www.googleapis.com/youtube/v3/search?' + query
-  })
+export const fetchVideo = query => async dispatch => {
   try {
-    const res = await Promise.all(songUrls.map(song => fetch(song)))
-    const json = await Promise.all(res.map(song => song.json()))
-    const videos = json.map(({ items }) => {
-      if (items.length) return items.pop().id.videoId
-    }).filter(item => item)
-    dispatch(loadVideosActions.success({ videos }))
+    const params = buildParams(query)
+    const req = 'https://www.googleapis.com/youtube/v3/search?' + buildQuery(params)
+    const res = await fetch(req)
+    const { items } = await res.json()
+    const video = items.pop().id.videoId
+    dispatch(loadVideoActions.success({ video }))
   } catch (err) {
-    dispatch(loadVideosActions.failure(err))
+    dispatch(loadVideoActions.failure(err))
   }
 }
 

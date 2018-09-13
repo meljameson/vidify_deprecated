@@ -3,25 +3,38 @@ import { AppWrapper, PlayerWrapper, Playlist, Row } from '../styled'
 import Player from './Player'
 import { authorize, getToken } from '../utils'
 import { connect } from 'react-redux'
-import { fetchSongs, fetchPlaylists, fetchVideos, fetchUser, setToken } from '../actions'
-import { selectSongs, selectPlaylists, selectVideos, selectUser, selectToken, selectCurrentVideo } from '../selectors'
+import { fetchSongs, fetchPlaylists, fetchVideo, fetchUser, setToken } from '../actions'
+import { selectSongs, selectPlaylists, selectUser, selectToken, selectVideo } from '../selectors'
 import Login from './Login'
 
 class Home extends Component {
   componentWillMount() {
+    console.log('mounting')
     const { token, setToken } = this.props
     if (!token) setToken(getToken())
   }
 
   componentDidUpdate() {
-    const { songs, videos, user, fetchUser, fetchVideos, token, fetchPlaylists, playlists } = this.props
+    const { user, fetchUser, token, fetchPlaylists, playlists, video, songs } = this.props
     if (!user && token) fetchUser(token)
     if (token && user && !playlists) fetchPlaylists(user, token)
-    if (songs && !videos.length) fetchVideos(songs)
+    if (!video && songs) {
+      const { name, artists, album } = songs[0]
+      this.searchVideo(name, artists, album)
+    }
+  }
+
+  searchVideo = (name, artists, album) => {
+    const query = `${name} ${artists.map(({ name }) => name).join(' ')} ${album}`
+    const result = query.split('undefined').filter(item => !!item).join(' ')
+    this.props.fetchVideo(result)
   }
 
   renderSongs = items => items.map(({ name, id, artists, album }) => (
-    <Row key={id} >
+    <Row
+      key={id}
+      onClick={() => this.searchVideo(name, artists, album)}
+    >
       {`${name} by ${artists.map(({ name }) => name)}`}
     </Row>
   ))
@@ -40,13 +53,12 @@ class Home extends Component {
 
 
   render() {
-    const { playlists, songs, user, selectedVideo } = this.props
-
+    const { playlists, songs, user, video } = this.props
     return (
       user ?
         (<AppWrapper>
           <PlayerWrapper>
-            <Player selectedVideo={selectedVideo} />
+            <Player selectedVideo={video} />
           </PlayerWrapper>
           <Playlist>
             {(songs && this.renderSongs(songs)) || (playlists && this.renderPlaylists(playlists))}
@@ -60,10 +72,9 @@ class Home extends Component {
 const mapStateToProps = state => ({
   songs: selectSongs(state),
   playlists: selectPlaylists(state),
-  videos: selectVideos(state),
+  video: selectVideo(state),
   user: selectUser(state),
-  token: selectToken(state),
-  selectedVideo: selectCurrentVideo(state)
+  token: selectToken(state)
 })
 
-export default connect(mapStateToProps, { fetchPlaylists, fetchSongs, fetchVideos, fetchUser, setToken })(Home)
+export default connect(mapStateToProps, { fetchPlaylists, fetchSongs, fetchVideo, fetchUser, setToken })(Home)

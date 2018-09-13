@@ -15,7 +15,7 @@ export const buildParams = (searchTerm) => ({
   key: process.env.REACT_APP_YT_CLIENT,
   maxResults: 1,
   part: 'snippet',
-  q: searchTerm,
+  q: encodeURIComponent(searchTerm),
 })
 
 export const authorize = () => {

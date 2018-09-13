@@ -1,13 +1,12 @@
 import {
   FETCH_PLAYLISTS,
   FETCH_SONGS,
-  FETCH_VIDEOS,
+  FETCH_VIDEO,
   FETCH_USER,
   SET_TOKEN
 } from './actions'
 
 const initialState = {
-  videos: [],
   playlists: {},
   songs: {}
 }
@@ -26,9 +25,9 @@ function reducer(state = initialState, action) {
       return Object.assign({}, state, {
         songs: action.payload.songs
       })
-    case FETCH_VIDEOS.SUCCESS:
+    case FETCH_VIDEO.SUCCESS:
       return Object.assign({}, state, {
-        videos: action.payload.videos
+        video: action.payload.video
       })
     case FETCH_USER.SUCCESS:
       return Object.assign({}, state, {
