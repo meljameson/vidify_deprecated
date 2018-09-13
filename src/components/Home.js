@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { AppWrapper, PlayerWrapper, Playlist, Row } from '../styled'
 import Player from './Player'
-import { authorize, getToken } from '../utils'
+import { getToken } from '../utils'
 import { connect } from 'react-redux'
 import { fetchSongs, fetchPlaylists, fetchVideo, fetchUser, setToken } from '../actions'
 import { selectSongs, selectPlaylists, selectUser, selectToken, selectVideo } from '../selectors'
@@ -9,7 +9,6 @@ import Login from './Login'
 
 class Home extends Component {
   componentWillMount() {
-    console.log('mounting')
     const { token, setToken } = this.props
     if (!token) setToken(getToken())
   }
@@ -64,7 +63,7 @@ class Home extends Component {
             {(songs && this.renderSongs(songs)) || (playlists && this.renderPlaylists(playlists))}
           </Playlist>
         </AppWrapper>) :
-        <Login onClick={authorize}>Log in to load Spotify playlists</Login>
+        <Login />
     )
   }
 }
