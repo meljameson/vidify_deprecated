@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import * as YTPlayer from 'yt-player'
+import * as YTPlayer from '../yt-player'
 
 class Player extends Component {
   constructor(props) {
