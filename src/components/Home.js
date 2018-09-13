@@ -46,7 +46,7 @@ class Home extends Component {
         this.props.fetchSongs(this.props.userId, this.props.token, id)
       }}
     >
-      <img style={{ height: '3rem', width: '3rem' }} src={image} /> {/* TODO: style */}
+      <img style={{ height: '3rem', width: '3rem' }} alt={`${name} album art`} src={image} /> {/* TODO: style */}
       {name} ({total})
     </Row>
   )))

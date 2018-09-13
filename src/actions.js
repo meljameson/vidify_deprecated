@@ -64,7 +64,7 @@ export const fetchSongs = (userId, token, playlistId) => async dispatch => {
     if (error) {
       authorize()
     } else {
-      const songs = items.map(({ track: { id, name, artists, album: { images, name: album } } }) => ({ id, name, artists, images, name }))
+      const songs = items.map(({ track: { id, name, artists, album: { images, name: album } } }) => ({ id, name, artists, images, album }))
       dispatch(loadSongsActions.success({ songs: { items: songs, total, next } }))
     }
   } catch (err) {
