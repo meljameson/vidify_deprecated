@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { AppWrapper, PlayerWrapper, Playlist, Row } from '../styled'
+import { AppWrapper, PlayerWrapper, Playlist, Row, Title } from '../styled'
 import Player from './Player'
 import { getToken } from '../utils'
 import { connect } from 'react-redux'
@@ -45,8 +45,8 @@ class Home extends Component {
         this.props.fetchSongs(this.props.userId, this.props.token, id)
       }}
     >
-      <img style={{ height: '3rem', width: '3rem' }} alt={`${name} album art`} src={image} /> {/* TODO: style */}
-      {name} ({total})
+      <img style={{ margin: '.5rem', height: '3rem', width: '3rem' }} alt={`${name} album art`} src={image} /> {/* TODO: style */}
+      <Title>{name}</Title>
     </Row>
   )))
 
