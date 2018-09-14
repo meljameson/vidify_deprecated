@@ -1,5 +1,3 @@
-Build with docker
+#Personal utility for spinning Spotify playlists into Youtube playlists
 
-docker container run -it -v $(pwd):/app vidify:tagname build
-
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+TODO: https://gitlab.com/meljameson/vidify/issues
