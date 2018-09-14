@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import * as YTPlayer from '../yt-player'
+import { selectVideo } from '../selectors'
 
 class Player extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      player: null
-    }
+  state = {
+    player: null
   }
 
   componentDidMount() {
@@ -14,8 +13,9 @@ class Player extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.selectedVideo !== this.props.selectedVideo) {
-      this.state.player.load(this.props.selectedVideo)
+    const { video } = this.props
+    if (video && prevProps.video !== video) {
+      this.state.player.load(video)
     }
   }
 
@@ -26,4 +26,8 @@ class Player extends Component {
   }
 }
 
-export default Player
+const mapStateToProps = state => ({
+  video: selectVideo(state)
+})
+
+export default connect(mapStateToProps)(Player)

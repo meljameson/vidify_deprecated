@@ -52,12 +52,12 @@ class Home extends Component {
 
 
   render() {
-    const { playlists, songs, user, video } = this.props
+    const { playlists, songs, user } = this.props
     return (
       user ?
         (<AppWrapper>
           <PlayerWrapper>
-            <Player selectedVideo={video} />
+            <Player />
           </PlayerWrapper>
           <Playlist>
             {(songs && this.renderSongs(songs)) || (playlists && this.renderPlaylists(playlists))}
