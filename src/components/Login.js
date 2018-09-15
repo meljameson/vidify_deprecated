@@ -1,13 +1,7 @@
 import styled from 'styled-components'
 import React from 'react'
 import { authorize } from '../utils'
-
-const Container = styled.div`
-display: flex;
-align-items: center;
-justify-content: center;
-height: 100%;
-`
+import FlexContainer from './FlexContainer'
 
 const Button = styled.button`
 text-align: center;   
@@ -24,12 +18,15 @@ transition-property: background-color, border-color, color, box-shadow, filter;
 &:hover {
   background-color: #1ed760;
 }
+input[type="button"]:focus {
+  outline: none;
+}
 `
 
 const Login = () => (
-  <Container>
+  <FlexContainer>
     <Button onClick={authorize}>Request playlists from Spotify</Button>
-  </Container>
+  </FlexContainer>
 )
 
 export default Login

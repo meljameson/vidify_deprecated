@@ -3,6 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "https://meljameson.gitlab.io/vidify",
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:5000",
+      "ws": true
+    }
+  },
   "dependencies": {
     "load-script2": "^1.0.1",
     "pts": "^0.5.2",

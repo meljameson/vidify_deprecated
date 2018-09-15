@@ -1,28 +1,21 @@
 import styled from 'styled-components'
-import React from 'react'
 
-const PlaylistWrapper = styled.div`
+export const Playlist = styled.div`
 min-width: 215px;
 border: 1px white solid;
 width: 35%;
 height: 70%;
-overflow: hidden;
-position: relative;
-`
-
-const PlaylistInner = styled.div`
-position: absolute;
-top: 0;
-bottom: 0;
-left: 0;
-right: -17px;
-overflow-y: scroll;
 overflow-x: hidden;
-padding-right: 1rem;
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #888; 
+}
 `
-
-export const Playlist = ({ children }) => (
-  <PlaylistWrapper>
-    <PlaylistInner>{children}</PlaylistInner>
-  </PlaylistWrapper>
-)
