@@ -8,7 +8,7 @@ export const buildQuery = (params) => (typeof params === 'object') ? (
 export const authorize = () => {
   const scopes = 'playlist-read-collaborative playlist-modify-public playlist-read-private playlist-modify-private'
   const redirect_uri = 'https://meljameson.gitlab.io/vidify/'
-  const authorizeUrl = `https://accounts.spotify.com/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&scope=${encodeURIComponent(scopes)}&response_type=token&redirect_uri=${redirect_uri}`
+  const authorizeUrl = `https://accounts.spotify.com/authorize?client_id=47ba3c41e3a54605bd4239e7bb57965b&scope=${encodeURIComponent(scopes)}&response_type=token&redirect_uri=${redirect_uri}`
   window.location.href = authorizeUrl
 }
 
