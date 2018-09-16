@@ -5,13 +5,6 @@ export const buildQuery = (params) => (typeof params === 'object') ? (
   ).join('&')
 ) : `${params}`
 
-export const buildParams = (searchTerm) => ({
-  key: process.env.REACT_APP_YT_CLIENT,
-  maxResults: 1,
-  part: 'snippet',
-  q: encodeURIComponent(searchTerm),
-})
-
 export const authorize = () => {
   const scopes = 'playlist-read-collaborative playlist-modify-public playlist-read-private playlist-modify-private'
   const redirect_uri = 'http://localhost:3000/'
