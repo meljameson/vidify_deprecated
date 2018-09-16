@@ -14,7 +14,7 @@ export const buildParams = (searchTerm) => ({
 
 export const authorize = () => {
   const scopes = 'playlist-read-collaborative playlist-modify-public playlist-read-private playlist-modify-private'
-  const redirect_uri = 'http://localhost:3000/'
+  const redirect_uri = 'https://meljameson.gitlab.io/vidify/'
   const authorizeUrl = `https://accounts.spotify.com/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&scope=${encodeURIComponent(scopes)}&response_type=token&redirect_uri=${redirect_uri}`
   window.location.href = authorizeUrl
 }
