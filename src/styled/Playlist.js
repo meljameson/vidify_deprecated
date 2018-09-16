@@ -13,7 +13,8 @@ overflow-x: hidden;
   background-color: #f0f0f0;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #888;
+  border-radius: 4px;
+  background-color: var(--black-transparent-20,rgba(0,0,0,0.2));
 }
 ::-webkit-scrollbar-thumb:hover {
     background: #888; 

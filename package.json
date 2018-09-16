@@ -2,14 +2,13 @@
   "name": "vidify",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://meljameson.gitlab.io/vidify",
   "proxy": {
     "/api": {
-      "target": "http://localhost:5000",
-      "ws": true
+      "target": "https://proxy-216604.appspot.com"
     }
   },
   "dependencies": {
+    "http-proxy-middleware": "^0.19.0",
     "load-script2": "^1.0.1",
     "pts": "^0.5.2",
     "react": "^16.4.2",
@@ -24,9 +23,13 @@
     "styled-components": "^3.4.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "node server",
+    "dev": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "concurrently": "^4.0.1"
   }
 }

@@ -79,7 +79,7 @@ export const fetchVideo = searchTerms => async dispatch => {
       part: 'snippet',
       q: searchTerms,
     })
-    const result = await fetch(`/api/youtube?${query}`, {
+    const result = await fetch(`https://proxy-216604.appspot.com/api/youtube?${query}`, {
       headers: {
         'Content-Type': 'application/json'
       }
