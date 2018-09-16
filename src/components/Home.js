@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { fetchSongs, fetchPlaylists, fetchVideo, fetchUser, setToken } from '../actions'
 import { selectSongs, selectPlaylists, selectUser, selectToken, selectVideo } from '../selectors'
 import Login from './Login'
+import Toolbar from './Toolbar'
 
 class Home extends Component {
   componentWillMount() {
