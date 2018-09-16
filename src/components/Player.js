@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as YTPlayer from '../yt-player'
 import { selectVideo } from '../selectors'
+import Loading from './Loading'
 
 class Player extends Component {
   state = {
@@ -21,7 +22,9 @@ class Player extends Component {
 
   render() {
     return (
-      <div style={{ height: '100%', width: '100%' }} id='player' />
+      <div style={{ height: '100%', width: '100%' }} id='player'>
+        {!this.props.video && <Loading />}
+      </div>
     )
   }
 }

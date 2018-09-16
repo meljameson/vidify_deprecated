@@ -1,4 +1,4 @@
-import { buildQuery, buildParams, createActionTypes, authorize } from './utils'
+import { buildQuery, createActionTypes, authorize } from './utils'
 
 export const FETCH_PLAYLISTS = createActionTypes('FETCH_PLAYLISTS')
 export const FETCH_SONGS = createActionTypes('FETCH_SONGS')
@@ -72,12 +72,19 @@ export const fetchSongs = (userId, token, playlistId) => async dispatch => {
   }
 }
 
-export const fetchVideo = query => async dispatch => {
+export const fetchVideo = searchTerms => async dispatch => {
   try {
-    const params = buildParams(query)
-    const req = 'https://www.googleapis.com/youtube/v3/search?' + buildQuery(params)
-    const res = await fetch(req)
-    const { items } = await res.json()
+    const query = buildQuery({
+      maxResults: 1,
+      part: 'snippet',
+      q: searchTerms,
+    })
+    const result = await fetch(`https://proxy-216604.appspot.com/api/youtube?${query}`, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    const { items } = await result.json()
     const video = items.pop().id.videoId
     dispatch(loadVideoActions.success({ video }))
   } catch (err) {
