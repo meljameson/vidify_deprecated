@@ -26,6 +26,8 @@ input[type="button"]:focus {
 const Login = () => (
   <FlexContainer>
     <Button onClick={authorize}>Request playlists from Spotify</Button>
+    U: ctipz26m2f77but6w9nu262e1
+    P: DemoAccount
   </FlexContainer>
 )
 
