@@ -1,11 +1,10 @@
 import styled from 'styled-components'
 
-export const Playlist = styled.div`
-min-width: 215px;
+export const PlaylistWrapper = styled.div`
 border: 1px white solid;
 width: 35%;
-height: 70%;
 overflow-x: hidden;
+position: relative;
 ::-webkit-scrollbar {
   width: 6px;
 }
