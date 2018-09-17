@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import { AppWrapper, PlayerWrapper, Playlist, Row, Title } from '../styled'
-import Player from './Player'
+import { AppWrapper } from '../styled'
 import { getToken } from '../utils'
 import { connect } from 'react-redux'
-import { fetchSongs, fetchPlaylists, fetchVideo, fetchUser, setToken } from '../actions'
-import { selectSongs, selectPlaylists, selectUser, selectToken, selectVideo } from '../selectors'
+import { fetchUser, setToken } from '../actions'
+import { selectUser, selectToken } from '../selectors'
+import Player from './Player'
 import Login from './Login'
+import Playlist from './Playlist'
 
 class Home extends Component {
   componentWillMount() {
@@ -14,66 +15,25 @@ class Home extends Component {
   }
 
   componentDidUpdate() {
-    const { user, fetchUser, token, fetchPlaylists, playlists, video, songs } = this.props
+    const { user, fetchUser, token } = this.props
     if (!user && token) fetchUser(token)
-    if (token && user && !playlists) fetchPlaylists(user, token)
-    if (!video && songs) {
-      const { name, artists, album } = songs[0]
-      this.searchVideo(name, artists, album)
-    }
   }
-
-  searchVideo = (name, artists, album) => {
-    const query = `${name} ${artists.map(({ name }) => name).join(' ')} ${album}`
-    const result = query.split('undefined').filter(item => !!item).join(' ')
-    this.props.fetchVideo(result)
-  }
-
-  renderSongs = items => items.map(({ name, id, artists, album }) => (
-    <Row
-      key={id}
-      onClick={() => this.searchVideo(name, artists, album)}
-    >
-      {`${name} by ${artists.map(({ name }) => name)}`}
-    </Row>
-  ))
-
-  renderPlaylists = playlists => (playlists.map(({ name, image, id, total }) => (
-    <Row
-      key={id}
-      onClick={() => {
-        this.props.fetchSongs(this.props.userId, this.props.token, id)
-      }}
-    >
-      <img style={{ margin: '.5rem', height: '3rem', width: '3rem' }} alt={`${name} album art`} src={image} /> {/* TODO: style */}
-      <Title>{name}</Title>
-    </Row>
-  )))
-
 
   render() {
-    const { playlists, songs, user } = this.props
     return (
-      user ?
+      this.props.user ?
         (<AppWrapper>
-          <PlayerWrapper>
-            <Player />
-          </PlayerWrapper>
-          <Playlist>
-            {(songs && this.renderSongs(songs)) || (playlists && this.renderPlaylists(playlists))}
-          </Playlist>
-        </AppWrapper>) :
+          <Player />
+          <Playlist />
+        </AppWrapper >) :
         <Login />
     )
   }
 }
 
 const mapStateToProps = state => ({
-  songs: selectSongs(state),
-  playlists: selectPlaylists(state),
-  video: selectVideo(state),
   user: selectUser(state),
   token: selectToken(state)
 })
 
-export default connect(mapStateToProps, { fetchPlaylists, fetchSongs, fetchVideo, fetchUser, setToken })(Home)
+export default connect(mapStateToProps, { fetchUser, setToken })(Home)
