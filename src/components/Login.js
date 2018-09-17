@@ -1,8 +1,7 @@
 import styled from 'styled-components'
 import React from 'react'
 import { authorize } from '../utils'
-import Icon from './Icon'
-import FlexContainer from '../styled/FlexContainer'
+import { FlexContainer } from '../styled'
 
 const Button = styled.button`
 text-align: center;   

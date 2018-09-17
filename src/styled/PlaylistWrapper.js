@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 
-export const Playlist = styled.div`
+export const PlaylistWrapper = styled.div`
+display: flex;
+flex-direction: column;
 min-width: 215px;
 border: 1px white solid;
 width: 35%;

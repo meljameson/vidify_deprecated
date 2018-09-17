@@ -1,6 +1,6 @@
 export { AppWrapper } from './AppWrapper'
 export { PlayerWrapper } from './PlayerWrapper'
-export { Playlist } from './Playlist'
+export { PlaylistWrapper } from './PlaylistWrapper'
 export { Row } from './Row'
 export { Title } from './Title'
 export { FlexContainer } from './FlexContainer'

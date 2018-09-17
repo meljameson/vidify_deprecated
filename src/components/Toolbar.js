@@ -1,8 +1,14 @@
 import styled from 'styled-components'
-import FlexContainer from '../styled/FlexContainer'
 import React from 'react'
 
-const Toolbar = ({ children }) => {
-  <FlexContainer>{children}</FlexContainer>
-}
+const StyledToolbar = styled.div`
+background-color: 'gray';
+`
+
+const Toolbar = ({ children }) => (
+  <StyledToolbar>
+    {children}
+  </StyledToolbar>
+)
+
 export default Toolbar

@@ -1,6 +1,6 @@
 import React from 'react'
 import Icon from './Icon'
-import FlexContainer from '../styled/FlexContainer'
+import FlexContainer from '../styled'
 
 const Loading = () => (
   <FlexContainer>
