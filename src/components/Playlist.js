@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import { PlaylistWrapper } from '../styled'
-import Toolbar from './Toolbar'
-import { Row, Title } from '../styled'
+import { Row, Title, PlaylistWrapper, Toolbar, ToolbarButton } from '../styled'
 import { fetchSongs, fetchPlaylists, fetchVideo, fetchUser } from '../actions'
 import { selectSongs, selectPlaylists, selectUser, selectToken, selectVideo } from '../selectors'
 import { connect } from 'react-redux'
+import styled from 'styled-components'
 
 class Playlist extends Component {
   state = {
@@ -60,12 +59,12 @@ class Playlist extends Component {
 
     return (
       <PlaylistWrapper>
-        {this.state.showSongs && <Toolbar><button onClick={this.toggleShowSongs}>Back</button></Toolbar>}
         {
           this.state.showSongs ? (
             songs && this.renderSongs(songs)
-          ) : playlists && this.renderPlaylists(playlists)
+            ) : playlists && this.renderPlaylists(playlists)
         }
+        {this.state.showSongs && <Toolbar><ToolbarButton onClick={this.toggleShowSongs}>&larr;</ToolbarButton></Toolbar>}
       </PlaylistWrapper>
     )
   }
