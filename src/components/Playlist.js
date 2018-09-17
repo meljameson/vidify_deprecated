@@ -44,6 +44,7 @@ class Playlist extends Component {
     <Row
       key={id}
       onClick={() => {
+        this.toggleShowSongs()
         this.props.fetchSongs(this.props.userId, this.props.token, id)
       }}
     >
@@ -52,12 +53,14 @@ class Playlist extends Component {
     </Row>
   ))
 
+  toggleShowSongs = () =>  this.setState({ showSongs: !this.state.showSongs })
+
   render() {
     const { playlists, songs } = this.props
 
     return (
       <PlaylistWrapper>
-        {this.state.showSongs && <Toolbar><button onClick={() => this.setState({ showSongs: !this.state.showSongs })}>Back</button></Toolbar>}
+        {this.state.showSongs && <Toolbar><button onClick={this.toggleShowSongs}>Back</button></Toolbar>}
         {
           this.state.showSongs ? (
             songs && this.renderSongs(songs)
