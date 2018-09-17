@@ -3,7 +3,6 @@ import { Row, Title, PlaylistWrapper, Toolbar, ToolbarButton } from '../styled'
 import { fetchSongs, fetchPlaylists, fetchVideo, fetchUser } from '../actions'
 import { selectSongs, selectPlaylists, selectUser, selectToken, selectVideo } from '../selectors'
 import { connect } from 'react-redux'
-import styled from 'styled-components'
 
 class Playlist extends Component {
   state = {

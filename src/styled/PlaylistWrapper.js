@@ -1,12 +1,8 @@
 import styled from 'styled-components'
 
 export const PlaylistWrapper = styled.div`
-display: flex;
-flex-direction: column;
-min-width: 215px;
 border: 1px white solid;
 width: 35%;
-height: 70%;
 overflow-x: hidden;
 ::-webkit-scrollbar {
   width: 6px;
