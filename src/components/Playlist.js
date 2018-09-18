@@ -1,44 +1,9 @@
 import React, { Component } from 'react'
-import { Row, Title, ToolbarButton } from '../styled'
+import { Row, Title, ToolbarButton, List, PlaylistWrapper } from '../styled'
 import { fetchSongs, fetchPlaylists, fetchVideo, fetchUser } from '../actions'
 import { selectSongs, selectPlaylists, selectUser, selectToken, selectVideo } from '../selectors'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-
-const Content = styled.div`
-  flex: 1;
-  height: 100%;
-  overflow: auto;
-  overflow-x: hidden;
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background-color: #f0f0f0;
-}
-::-webkit-scrollbar-thumb {
-  border-radius: 4px;
-  background-color: var(--black-transparent-20,rgba(0,0,0,0.2));
-}
-::-webkit-scrollbar-thumb:hover {
-    background: #888; 
-}
-`
-
-const Wrapper = styled.div`
-box-sizing: border-box;
-align-self: center;
-display: flex;
-flex-flow: column;
-max-height: 100%;
-`
-
-const PlaylistWrapper = styled.div`
-border: 1px white solid;
-width: 35%;
-display: flex;
-justify-content: center;
-`
 
 class Playlist extends Component {
   state = {
@@ -93,22 +58,20 @@ class Playlist extends Component {
 
     return (
       <PlaylistWrapper>
-        <Wrapper>
-          <Content>
-            {
-              this.state.showSongs
-                ? songs && this.renderSongs(songs)
-                : playlists && this.renderPlaylists(playlists)
-            }
-          </Content>
-          {this.state.showSongs && (
-            <footer style={{ width: '100%' }}>
-              <ToolbarButton style={{ width: '100%' }} onClick={this.toggleShowSongs}>
-                &larr;
-              </ToolbarButton>
-            </footer>
-          )}
-        </Wrapper>
+        {this.state.showSongs && (
+          <header>
+            <ToolbarButton onClick={this.toggleShowSongs}>
+              &larr;
+            </ToolbarButton>
+          </header>
+        )}
+        <List>
+          {
+            this.state.showSongs
+              ? songs && this.renderSongs(songs)
+              : playlists && this.renderPlaylists(playlists)
+          }
+        </List>
       </PlaylistWrapper>
     )
   }

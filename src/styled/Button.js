@@ -24,4 +24,5 @@ min-width: 160px;
 
 export const ToolbarButton = styled(DefaultButton)` 
 font-size: 2rem;
+width: 100%;
 `

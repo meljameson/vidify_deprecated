@@ -1,8 +1,5 @@
 import styled from 'styled-components'
 
-export const Toolbar = styled.div`
-font-size: 2rem;
+export const Toolbar = styled.header`
 width: 100%;
-display: flex;
-flex-flow: column;
 `
