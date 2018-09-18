@@ -7,10 +7,11 @@ transition-duration: .3s;
 border-width: 0;
 text-transform: uppercase;
 color: #fff;
+cursor: pointer;
 &:hover {
   background-color: #1ed760;
 }
-input[type="button"]:focus {
+&:focus {
   outline: none;
 }
 `
@@ -18,13 +19,9 @@ input[type="button"]:focus {
 export const LoginButton = styled(DefaultButton)` 
 border-radius: 500px;
 padding: 16px 48px 18px;
-letter-spacing: 2px;
 min-width: 160px;
 `
 
 export const ToolbarButton = styled(DefaultButton)` 
 font-size: 2rem;
-width: 100%;
-position: absolute;
-bottom: 0;
 `

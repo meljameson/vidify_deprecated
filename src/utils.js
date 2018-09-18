@@ -5,20 +5,22 @@ export const buildQuery = (params) => (typeof params === 'object') ? (
   ).join('&')
 ) : `${params}`
 
-export const authorize = () => {
+export function authorize() {
   const scopes = 'playlist-read-collaborative playlist-modify-public playlist-read-private playlist-modify-private'
-  const redirect_uri = 'https://meljameson.gitlab.io/vidify/'
+  const redirect_uri = process.env.REACT_APP_CALLBACK
   const app_id = '47ba3c41e3a54605bd4239e7bb57965b'
   const authorizeUrl = `https://accounts.spotify.com/authorize?client_id=${app_id}&scope=${encodeURIComponent(scopes)}&response_type=token&redirect_uri=${redirect_uri}`
   window.location.href = authorizeUrl
 }
 
-export const createActionTypes = (action) => ['REQUEST', 'SUCCESS', 'FAILURE'].reduce((acc = {}, val) => {
-  acc[val] = `${action}_${val}`
-  return acc
-}, {})
+export function createActionTypes(action) {
+  return ['REQUEST', 'SUCCESS', 'FAILURE'].reduce((acc = {}, val) => {
+    acc[val] = `${action}_${val}`
+    return acc
+  }, {})
+}
 
-export const getToken = () => {
+export function getToken() {
   let hashParams = {}
   let e, r = /([^&;=]+)=?([^&;]*)/g,
     q = window.location.hash.substring(1)
@@ -29,4 +31,13 @@ export const getToken = () => {
   }
   const { access_token } = hashParams
   return access_token
+}
+
+// TODO: make smarter matches, dumb but functional right now
+export function findMatch(videos, artistNames) {
+  const video = videos.find(({ snippet, id }) => {
+    const text = (`${snippet.title}  ${snippet.description}`).toLowerCase()
+    return text.includes('official') || snippet.channelTitle.includes(artistNames) || id.kind.split('#').pop() === 'video'
+  })
+  return video ? video.id.videoId : undefined
 }

@@ -13,4 +13,4 @@ server.get('/', function (req, res) {
 
 server.use('/api', proxy({ target: 'https://proxy-216604.appspot.com', changeOrigin: true }))
 
-server.listen(3000, () => 'listening on 9000')
+server.listen(3000, () => 'listening on 3000')

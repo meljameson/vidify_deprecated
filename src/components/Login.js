@@ -7,9 +7,11 @@ const Login = () => (
     <div style={{ textAlign: 'center', fontSize: '2rem' }}>
       Vidify your Spotify. Pick a playlist. Get the videos.
     </div>
-    <LoginButton style={{ margin: '2.5rem' }} onClick={authorize}>Request playlists from Spotify</LoginButton>
+    <div style={{ display: 'flex', alignItems: 'center', height: '10rem' }}>
+      <LoginButton onClick={authorize}>Request playlists from Spotify</LoginButton>
+    </div>
     <div style={{ textAlign: 'center', fontSize: '.75rem' }}>
-      Feel free to use your account. No data is stored. Here's a demo account if you want it. <br />
+      Here's a demo account if you don't want to use your own <br />
       User: ctipz26m2f77but6w9nu262e1 <br />
       Pass: DemoAccount <br />
     </div >
