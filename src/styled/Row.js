@@ -1,12 +1,13 @@
 import styled from 'styled-components'
 
 export const Row = styled.div`
+cursor: pointer;
 display: flex;
 align-items: center;
 flex-direction: row;
 width: 100%;
 height: 3rem;
-margin: .5rem;
+padding: .5rem;
 color: white;
 &:hover {
   background-color: pink;

@@ -5,6 +5,7 @@ const Inner = styled.div`
 display: flex;
 height: 75%;
 flex: 1;
+border: 1px solid white;
 `
 
 const Outer = styled.div`
@@ -15,7 +16,7 @@ width: 75%;
 margin: auto;
 `
 
-export const AppWrapper = ({children}) => (
+export const AppWrapper = ({ children }) => (
   <Outer>
     <Inner>
       {children}

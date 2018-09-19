@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { Row, Title, PlaylistWrapper, Toolbar, ToolbarButton } from '../styled'
+import { Row, Title, ToolbarButton, List, PlaylistWrapper } from '../styled'
 import { fetchSongs, fetchPlaylists, fetchVideo, fetchUser } from '../actions'
 import { selectSongs, selectPlaylists, selectUser, selectToken, selectVideo } from '../selectors'
 import { connect } from 'react-redux'
+import styled from 'styled-components'
 
 class Playlist extends Component {
   state = {
@@ -23,17 +24,16 @@ class Playlist extends Component {
     }
   }
 
-  searchVideo = (name, artists, album) => {
-    const query = `${name} ${artists.map(({ name }) => name).join(' ')} ${album}`
-    const result = query.split('undefined').filter(item => !!item).join(' ')
-    this.props.fetchVideo(result)
+  searchVideo = (song, artists, album) => {
+    this.props.fetchVideo({ song, artists, album })
   }
 
-  renderSongs = songs => songs.map(({ name, id, artists, album }) => (
+  renderSongs = songs => songs.map(({ name, id, artists, album, images }) => (
     <Row
       key={id}
       onClick={() => this.searchVideo(name, artists, album)}
     >
+      <img style={{ margin: '.5rem', height: '3rem', width: '3rem' }} alt={`${name} album art`} src={(images && images[0].url)} />
       {`${name} by ${artists.map(({ name }) => name)}`}
     </Row>
   ))
@@ -51,19 +51,27 @@ class Playlist extends Component {
     </Row>
   ))
 
-  toggleShowSongs = () =>  this.setState({ showSongs: !this.state.showSongs })
+  toggleShowSongs = () => this.setState({ showSongs: !this.state.showSongs })
 
   render() {
     const { playlists, songs } = this.props
 
     return (
       <PlaylistWrapper>
-        {
-          this.state.showSongs ? (
-            songs && this.renderSongs(songs)
-            ) : playlists && this.renderPlaylists(playlists)
-        }
-        {this.state.showSongs && <Toolbar><ToolbarButton onClick={this.toggleShowSongs}>&larr;</ToolbarButton></Toolbar>}
+        {this.state.showSongs && (
+          <header>
+            <ToolbarButton onClick={this.toggleShowSongs}>
+              &larr;
+            </ToolbarButton>
+          </header>
+        )}
+        <List>
+          {
+            this.state.showSongs
+              ? songs && this.renderSongs(songs)
+              : playlists && this.renderPlaylists(playlists)
+          }
+        </List>
       </PlaylistWrapper>
     )
   }

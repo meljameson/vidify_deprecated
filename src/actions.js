@@ -1,4 +1,4 @@
-import { buildQuery, createActionTypes, authorize } from './utils'
+import { buildQuery, createActionTypes, authorize, findMatch } from './utils'
 
 export const FETCH_PLAYLISTS = createActionTypes('FETCH_PLAYLISTS')
 export const FETCH_SONGS = createActionTypes('FETCH_SONGS')
@@ -72,12 +72,14 @@ export const fetchSongs = (userId, token, playlistId) => async dispatch => {
   }
 }
 
-export const fetchVideo = searchTerms => async dispatch => {
+export const fetchVideo = ({ song, artists, album }) => async dispatch => {
+  const artistNames = artists.map(({ name }) => name).join(' ')
+  const terms = `${song} ${artistNames}`.split('undefined').filter(item => !!item).join(' ')
   try {
     const query = buildQuery({
-      maxResults: 1,
+      maxResults: 5,
       part: 'snippet',
-      q: searchTerms,
+      q: terms,
     })
     const result = await fetch(`https://proxy-216604.appspot.com/api/youtube?${query}`, {
       headers: {
@@ -85,8 +87,8 @@ export const fetchVideo = searchTerms => async dispatch => {
       }
     })
     const { items } = await result.json()
-    const video = items.pop().id.videoId
-    dispatch(loadVideoActions.success({ video }))
+    const video = findMatch(items, artistNames)
+    if (video) dispatch(loadVideoActions.success({ video }))
   } catch (err) {
     dispatch(loadVideoActions.failure(err))
   }
