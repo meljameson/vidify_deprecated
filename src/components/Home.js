@@ -21,12 +21,12 @@ class Home extends Component {
 
   render() {
     return (
-      this.props.user ?
-        (<AppWrapper>
+      this.props.user ? (
+        <AppWrapper>
           <Player />
           <Playlist />
-        </AppWrapper >) :
-        <Login />
+        </AppWrapper >
+      ) : <Login />
     )
   }
 }

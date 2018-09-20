@@ -58,7 +58,7 @@ class Playlist extends Component {
     return (
       <PlaylistWrapper>
         {this.state.showSongs && (
-          <header>
+          <header style={{ margin: '1rem' }}>
             <ToolbarButton onClick={this.toggleShowSongs}>
               &larr;
             </ToolbarButton>

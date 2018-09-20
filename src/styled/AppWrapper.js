@@ -1,25 +1,24 @@
 import styled from 'styled-components'
 import React from 'react'
 
-const Inner = styled.div`
-display: flex;
-height: 75%;
-flex: 1;
-border: 1px solid white;
-`
-
-const Outer = styled.div`
-display: flex;
-align-items: center;
-height: 100%;
-width: 75%;
-margin: auto;
+const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-gap: 20px;
+  grid-template-areas:
+    "player"
+    "playlist";
+  align-items: center;
+  @media (min-width: 1000px) {
+    grid-template-columns: 3fr minmax(300px, 1.5fr);
+    grid-template-areas:
+      "player playlist";
+  }
 `
 
 export const AppWrapper = ({ children }) => (
-  <Outer>
-    <Inner>
-      {children}
-    </Inner>
-  </Outer>
+  <Wrapper>
+    {children}
+  </Wrapper>
 )

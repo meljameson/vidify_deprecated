@@ -1,7 +1,9 @@
 import styled from 'styled-components'
 
 export const PlaylistWrapper = styled.div`
-width: 35%;
+max-height: 100%;
+grid-area: playlist;
 display: flex;
 flex-direction: column;
+overflow: auto;
 `
