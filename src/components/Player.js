@@ -3,14 +3,6 @@ import { connect } from 'react-redux'
 import * as YTPlayer from '../yt-player'
 import { selectVideo } from '../selectors'
 import { FlexContainer, PlayerWrapper, Video } from '../styled'
-import styled from 'styled-components'
-
-const Wrapper = styled.div`
-/* display: flex;
-align-content: center;
-align-items: center;
-height: 100%; */
-`
 
 class Player extends Component {
   state = {
@@ -30,17 +22,15 @@ class Player extends Component {
 
   render() {
     return (
-      <Wrapper>
-        <PlayerWrapper>
-          <Video id='player'>
-            {!this.props.video && (
-              <FlexContainer>
-                <p>Pick a playlist</p>
-              </FlexContainer>
-            )}
-          </Video>
-        </PlayerWrapper>
-      </Wrapper>
+      <PlayerWrapper>
+        <Video id='player'>
+          {!this.props.video && (
+            <FlexContainer>
+              <p>Pick a playlist</p>
+            </FlexContainer>
+          )}
+        </Video>
+      </PlayerWrapper>
     )
   }
 }

@@ -1,8 +1,6 @@
 import styled from 'styled-components'
 
 export const List = styled.div`
-height: 100%;
-overflow: auto;
 overflow-x: hidden;
 ::-webkit-scrollbar {
   width: 4px;

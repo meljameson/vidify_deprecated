@@ -9,7 +9,6 @@ const Wrapper = styled.div`
   grid-template-areas:
     "player"
     "playlist";
-  align-items: center;
   @media (min-width: 1000px) {
     grid-template-columns: 3fr minmax(300px, 1.5fr);
     grid-template-areas:
