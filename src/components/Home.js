@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { AppWrapper } from '../styled'
+import { Main } from '../styled'
 import { getToken } from '../utils'
 import { connect } from 'react-redux'
 import { fetchUser, setToken } from '../actions'
@@ -21,12 +21,12 @@ class Home extends Component {
 
   render() {
     return (
-      this.props.user ?
-        (<AppWrapper>
+      this.props.user ? (
+        <Main>
           <Player />
           <Playlist />
-        </AppWrapper >) :
-        <Login />
+        </Main >
+      ) : <Login />
     )
   }
 }

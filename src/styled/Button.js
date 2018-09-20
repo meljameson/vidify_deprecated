@@ -22,7 +22,7 @@ padding: 16px 48px 18px;
 min-width: 160px;
 `
 
-export const ToolbarButton = styled(DefaultButton)` 
+export const PlaylistButton = styled(DefaultButton)` 
 font-size: 2rem;
 width: 100%;
 `
