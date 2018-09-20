@@ -1,5 +1,8 @@
 # Personal utility for spinning Spotify playlists into Youtube playlists
 
+
+[![Maintainability](https://api.codeclimate.com/v1/badges/0df541510d8f1e7af7df/maintainability)](https://codeclimate.com/github/meljameson/vidify/maintainability)
+
 http://meljameson.gitlab.io/vidify
 
 https://gitlab.com/meljameson/vidify/issues
