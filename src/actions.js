@@ -1,4 +1,4 @@
-import { buildQuery, createActionTypes, authorize, findMatch } from './utils'
+import { buildQuery, createActionTypes, authorize, findMatch, createActions } from './utils'
 
 export const FETCH_PLAYLISTS = createActionTypes('FETCH_PLAYLISTS')
 export const FETCH_SONGS = createActionTypes('FETCH_SONGS')
@@ -6,29 +6,10 @@ export const FETCH_VIDEO = createActionTypes('FETCH_VIDEO')
 export const FETCH_USER = createActionTypes('FETCH_USER')
 export const SET_TOKEN = 'SET_TOKEN'
 
-const loadPlaylistsActions = {
-  request: id => ({ type: FETCH_PLAYLISTS.REQUEST, payload: id }),
-  success: data => ({ type: FETCH_PLAYLISTS.SUCCESS, payload: data }),
-  failure: error => ({ type: FETCH_PLAYLISTS.FAILURE, payload: error })
-}
-
-const loadSongsActions = {
-  request: id => ({ type: FETCH_SONGS.REQUEST, payload: id }),
-  success: data => ({ type: FETCH_SONGS.SUCCESS, payload: data }),
-  failure: error => ({ type: FETCH_SONGS.FAILURE, payload: error })
-}
-
-const loadVideoActions = {
-  request: id => ({ type: FETCH_VIDEO.REQUEST, payload: id }),
-  success: data => ({ type: FETCH_VIDEO.SUCCESS, payload: data }),
-  failure: error => ({ type: FETCH_VIDEO.FAILURE, payload: error })
-}
-
-const loadUserActions = {
-  request: id => ({ type: FETCH_USER.REQUEST, payload: id }),
-  success: data => ({ type: FETCH_USER.SUCCESS, payload: data }),
-  failure: error => ({ type: FETCH_USER.FAILURE, payload: error })
-}
+const loadPlaylistsActions = createActions(FETCH_PLAYLISTS)
+const loadSongsActions = createActions(FETCH_SONGS)
+const loadVideoActions = createActions(FETCH_VIDEO)
+const loadUserActions = createActions(FETCH_USER)
 
 export const fetchPlaylists = (userId, token) => async dispatch => {
   const req = new Request(`https://api.spotify.com/v1/users/${userId}/playlists`, { // TODO: add auth header in proxy

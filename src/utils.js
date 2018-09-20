@@ -7,7 +7,7 @@ export const buildQuery = (params) => (typeof params === 'object') ? (
 
 export function authorize() {
   const scopes = 'playlist-read-collaborative playlist-modify-public playlist-read-private playlist-modify-private'
-  const redirect_uri = 'https://meljameson.gitlab.io/vidify/'
+  const redirect_uri = 'https://localhost:3001/'
   const app_id = '47ba3c41e3a54605bd4239e7bb57965b'
   const authorizeUrl = `https://accounts.spotify.com/authorize?client_id=${app_id}&scope=${encodeURIComponent(scopes)}&response_type=token&redirect_uri=${redirect_uri}`
   window.location.href = authorizeUrl
@@ -41,3 +41,9 @@ export function findMatch(videos, artistNames) {
   })
   return video ? video.id.videoId : undefined
 }
+
+export const createActions = (action) => ({
+  request: id => ({ type: action.REQUEST, payload: id }),
+  success: data => ({ type: action.SUCCESS, payload: data }),
+  failure: error => ({ type: action.FAILURE, payload: error })
+})
