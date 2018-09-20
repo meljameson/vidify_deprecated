@@ -3,8 +3,6 @@ const proxy = require('http-proxy-middleware')
 const path = require('path')
 const server = express()
 
-const dev = process.env.NODE_ENV !== 'production'
-
 server.use(express.static(path.join(__dirname, 'build')))
 
 server.get('/', function (req, res) {
