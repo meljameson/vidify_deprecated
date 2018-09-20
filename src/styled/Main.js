@@ -8,7 +8,7 @@ export const Main = styled.div`
   grid-template-areas:
     "player"
     "playlist";
-  @media (min-width: 1000px) {
+  @media (min-width: 1025px) {
     grid-template-columns: 3fr minmax(300px, 1.5fr);
     grid-template-areas:
       "player playlist";

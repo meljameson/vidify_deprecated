@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Row, Title, PlaylistButton, List, PlaylistWrapper } from '../styled'
+import { Row, Title, PlaylistButton, List, PlaylistWrapper, Header } from '../styled'
 import { fetchSongs, fetchPlaylists, fetchVideo, fetchUser } from '../actions'
 import { selectSongs, selectPlaylists, selectUser, selectToken, selectVideo } from '../selectors'
 import { connect } from 'react-redux'
@@ -58,11 +58,11 @@ class Playlist extends Component {
     return (
       <PlaylistWrapper>
         {this.state.showSongs && (
-          <header style={{ margin: '1rem' }}>
+          <Header>
             <PlaylistButton onClick={this.toggleShowSongs}>
               &larr;
             </PlaylistButton>
-          </header>
+          </Header>
         )}
         <List>
           {
