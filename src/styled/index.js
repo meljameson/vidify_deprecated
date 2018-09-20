@@ -1,4 +1,4 @@
-export { AppWrapper } from './AppWrapper'
+export { Main } from './Main'
 export { PlayerWrapper } from './PlayerWrapper'
 export { PlaylistWrapper } from './PlaylistWrapper'
 export { Row } from './Row'

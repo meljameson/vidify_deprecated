@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import React from 'react'
 
-const Wrapper = styled.div`
+export const Main = styled.div`
   width: 100%;
   height: 100%;
   display: grid;
@@ -15,9 +15,3 @@ const Wrapper = styled.div`
       "player playlist";
   }
 `
-
-export const AppWrapper = ({ children }) => (
-  <Wrapper>
-    {children}
-  </Wrapper>
-)
