@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import * as YTPlayer from '../yt-player'
+import * as YTPlayer from 'yt-player/lib'
 import { selectVideo } from '../selectors'
 import { FlexContainer, PlayerWrapper, Video } from '../styled'
 

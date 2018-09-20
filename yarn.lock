@@ -4275,7 +4275,7 @@ load-json-file@^2.0.0:
     pify "^2.0.0"
     strip-bom "^3.0.0"
 
-load-script2@^1.0.1:
+load-script2@^1.0.0, load-script2@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/load-script2/-/load-script2-1.0.1.tgz#fd7d75987d0a7dbeab5b11f93581b9154a04eac1"
 
@@ -7513,3 +7513,9 @@ yargs@~3.10.0:
     cliui "^2.1.0"
     decamelize "^1.0.0"
     window-size "0.1.0"
+
+yt-player@meljameson/yt-player#master:
+  version "3.1.0"
+  resolved "https://codeload.github.com/meljameson/yt-player/tar.gz/e946315e183ecf250fc4f6f77620799d660bb3e2"
+  dependencies:
+    load-script2 "^1.0.0"
