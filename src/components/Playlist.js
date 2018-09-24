@@ -30,7 +30,7 @@ class Playlist extends Component {
   }
 
   renderSongs = songs => songs.map(({ name, id, artists, album, images }, i) => {
-    let style = ((!this.props.currentSong && i === 0) || (id === this.props.currentSong)) ? { backgroundColor: 'pink' } : {}
+    let style = ((!this.props.currentSong && i === 0) || (id === this.props.currentSong)) ? { backgroundColor: '#1db954' } : {}
     return (
       <Row
         style={style}
