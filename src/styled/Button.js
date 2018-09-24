@@ -6,7 +6,7 @@ background-color: #1db954;
 transition-duration: .3s;
 border-width: 0;
 text-transform: uppercase;
-color: #000;
+color: #fff;
 cursor: pointer;
 &:hover {
   background-color: #1db954;

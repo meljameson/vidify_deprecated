@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Row, Title, PlaylistButton, List, PlaylistWrapper, Header, Album } from '../styled'
+import { Row, Title, PlaylistButton, List, PlaylistWrapper, Header, Album, FlexContainer } from '../styled'
 import { fetchSongs, fetchPlaylists, fetchVideo, fetchUser } from '../actions/actions'
 import { selectSongs, selectPlaylists, selectAuth, selectVideo } from '../selectors/selectors'
 import { connect } from 'react-redux'
@@ -68,7 +68,7 @@ class Playlist extends Component {
 
     return (
       error
-        ? 'Error loading request'
+        ? <FlexContainer>Error loading request</FlexContainer>
         : isFetching
           ? <Loading>Loading playlists...</Loading>
           : (
