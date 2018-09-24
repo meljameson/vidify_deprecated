@@ -5,13 +5,6 @@ const video = createReducer({
   isFetching: false,
   error: false
 }, {
-    [FETCH_VIDEO.REQUEST]: (state, action) => {
-      return {
-        ...state,
-        isFetching: true,
-        error: false
-      }
-    },
     [FETCH_VIDEO.SUCCESS]: (state, { payload }) => {
       return Object.assign({}, state, {
         id: payload.video,

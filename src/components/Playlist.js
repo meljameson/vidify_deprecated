@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Row, Title, PlaylistButton, List, PlaylistWrapper, Header } from '../styled'
+import { Row, Title, PlaylistButton, List, PlaylistWrapper, Header, Album } from '../styled'
 import { fetchSongs, fetchPlaylists, fetchVideo, fetchUser } from '../actions/actions'
 import { selectSongs, selectPlaylists, selectAuth, selectVideo } from '../selectors/selectors'
 import { connect } from 'react-redux'
@@ -28,25 +28,33 @@ class Playlist extends Component {
     this.props.fetchVideo({ song, artists, album })
   }
 
-  renderSongs = songs => songs.map(({ name, id, artists, album, images }) => (
-    <Row
-      key={id}
-      onClick={() => this.searchVideo(name, artists, album)}
-    >
-      <img style={{ margin: '.5rem', height: '3rem', width: '3rem' }} alt={`${name} album art`} src={(images && images[0].url)} />
-      {`${name} by ${artists.map(({ name }) => name)}`}
-    </Row>
-  ))
+  renderSongs = songs => songs.map(({ name, id, artists, album, images }, i) => {
+    let style = ((!this.props.currentSong && i === 0) || (id === this.props.currentSong)) ? { backgroundColor: 'pink' } : {}
+    return (
+      <Row
+        style={style}
+        key={id}
+        onClick={() => {
+          this.props.changeCurrentSong(id)
+          this.searchVideo(name, artists, album)
+        }}
+      >
+        <Album alt={`${name} album art`} src={(images && images[0].url)} />
+        {`${name} by ${artists.map(({ name }) => name)}`}
+      </Row>
+    )
+  })
 
   renderPlaylists = playlists => playlists.map(({ name, image, id, total }) => (
     <Row
       key={id}
       onClick={() => {
         this.toggleShowSongs()
+        this.props.changeCurrentSong(null)
         this.props.fetchSongs(this.props.userId, this.props.token, id)
       }}
     >
-      <img style={{ margin: '.5rem', height: '3rem', width: '3rem' }} alt={`${name} album art`} src={image} />
+      <Album alt={`${name} album art`} src={image} />
       <Title>{name}</Title>
     </Row>
   ))
@@ -57,9 +65,11 @@ class Playlist extends Component {
     const { playlists, songs, isFetching = true, error = false } = this.props
 
     return (
-      <div>
-        {
-          error ? 'Error loading request' : isFetching ? <Loading /> : (
+      error
+        ? 'Error loading request'
+        : isFetching
+          ? <Loading>Loading playlists...</Loading>
+          : (
             <PlaylistWrapper>
               {this.state.showSongs && (
                 <Header>
@@ -77,8 +87,6 @@ class Playlist extends Component {
               </List>
             </PlaylistWrapper>
           )
-        }
-      </div>
     )
   }
 }

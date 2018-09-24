@@ -6,4 +6,5 @@ grid-area: playlist;
 display: flex;
 flex-direction: column;
 overflow: auto;
+border-left: 1px solid white;
 `

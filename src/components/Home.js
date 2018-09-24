@@ -7,8 +7,13 @@ import { selectAuth } from '../selectors/selectors'
 import Player from './Player'
 import Login from './Login'
 import Playlist from './Playlist'
+import Loading from './Loading'
 
 class Home extends Component {
+  state = {
+    currentSong: null
+  }
+
   componentWillMount() {
     const { token, setToken } = this.props
     if (!token) setToken(getToken())
@@ -19,20 +24,26 @@ class Home extends Component {
     if (!user && token) fetchUser(token)
   }
 
+  changeCurrentSong = (id) => {
+    this.setState({ currentSong: id })
+  }
+
   render() {
+    const { isFetching = true, user } = this.props
     return (
-      this.props.user ? (
-        <Main>
-          <Player />
-          <Playlist />
-        </Main >
-      ) : <Login />
+      isFetching ? <Loading>Loading user profile...</Loading> :
+        user ? (
+          <Main>
+            <Player />
+            <Playlist changeCurrentSong={this.changeCurrentSong} currentSong={this.state.currentSong} />
+          </Main >
+        ) : <Login />
     )
   }
 }
 
 const mapStateToProps = state => {
-  const { user, token, isFetching = true, error } = selectAuth(state)
+  const { user, token, isFetching, error } = selectAuth(state)
 
   return {
     user,
