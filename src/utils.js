@@ -42,8 +42,20 @@ export function findMatch(videos, artistNames) {
   return video ? video.id.videoId : undefined
 }
 
-export const createActions = (action) => ({
-  request: id => ({ type: action.REQUEST, payload: id }),
-  success: data => ({ type: action.SUCCESS, payload: data }),
-  failure: error => ({ type: action.FAILURE, payload: error })
-})
+export function createActions(action) {
+  return ({
+    request: id => ({ type: action.REQUEST, payload: id }),
+    success: data => ({ type: action.SUCCESS, payload: data }),
+    failure: error => ({ type: action.FAILURE, payload: error })
+  })
+}
+
+export function createReducer(initialState, handlers) {
+  return function reducer(state = initialState, action) {
+    if (handlers.hasOwnProperty(action.type)) {
+      return handlers[action.type](state, action)
+    } else {
+      return state
+    }
+  }
+}

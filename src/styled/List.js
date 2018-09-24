@@ -12,7 +12,7 @@ overflow-x: hidden;
   background-color: #888;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: pink; 
+  background: #1db954; 
 }
 }
 `

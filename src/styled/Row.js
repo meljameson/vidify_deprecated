@@ -10,8 +10,7 @@ height: 3rem;
 padding: .5rem;
 color: white;
 &:hover {
-  background-color: pink;
-  color: darkgray;
+  background-color: #1db954;
   transition: 0.3s;
 }
 `

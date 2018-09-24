@@ -6,7 +6,8 @@ import { connect } from 'react-redux'
 
 class Playlist extends Component {
   state = {
-    showSongs: false
+    showSongs: false,
+    currentPlaylist: null
   }
 
   componentDidMount() {
@@ -41,6 +42,7 @@ class Playlist extends Component {
     <Row
       key={id}
       onClick={() => {
+        this.setState({ currentPlaylist: name })
         this.toggleShowSongs()
         this.props.fetchSongs(this.props.userId, this.props.token, id)
       }}
@@ -59,6 +61,9 @@ class Playlist extends Component {
       <PlaylistWrapper>
         {this.state.showSongs && (
           <Header>
+            <div style={{ paddingBottom: '1rem', textAlign: 'center', fontWeight: 'bold', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
+              {this.state.currentPlaylist}
+            </div>
             <PlaylistButton onClick={this.toggleShowSongs}>
               &larr;
             </PlaylistButton>

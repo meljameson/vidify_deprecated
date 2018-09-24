@@ -5,7 +5,7 @@
   "homepage": "https://meljameson.gitlab.io/vidify",
   "proxy": {
     "/api": {
-      "target": "https://proxy-216604.appspot.com"
+      "target": "http://localhost:5000"
     }
   },
   "dependencies": {
