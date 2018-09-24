@@ -1,4 +1,4 @@
-import { buildQuery, createActionTypes, authorize, findMatch, createActions } from './utils'
+import { buildQuery, createActionTypes, authorize, findMatch, createActions } from '../utils'
 
 export const FETCH_PLAYLISTS = createActionTypes('FETCH_PLAYLISTS')
 export const FETCH_SONGS = createActionTypes('FETCH_SONGS')
@@ -12,6 +12,7 @@ const loadVideoActions = createActions(FETCH_VIDEO)
 const loadUserActions = createActions(FETCH_USER)
 
 export const fetchPlaylists = (userId, token) => async dispatch => {
+  dispatch(loadPlaylistsActions.request())
   const req = new Request(`https://api.spotify.com/v1/users/${userId}/playlists`, { // TODO: add auth header in proxy
     headers: new Headers({
       'Authorization': 'Bearer ' + token
@@ -28,11 +29,12 @@ export const fetchPlaylists = (userId, token) => async dispatch => {
       dispatch(loadPlaylistsActions.success({ playlists: { items: playlists, total, next } }))
     }
   } catch (err) {
-    console.error(err)
+    dispatch(loadPlaylistsActions.failure(err))
   }
 }
 
 export const fetchSongs = (userId, token, playlistId) => async dispatch => {
+  dispatch(loadSongsActions.request())
   const req = new Request(`https://api.spotify.com/v1/users/${userId}/playlists/${playlistId}/tracks`, {
     headers: new Headers({
       'Authorization': 'Bearer ' + token
@@ -49,11 +51,12 @@ export const fetchSongs = (userId, token, playlistId) => async dispatch => {
       dispatch(loadSongsActions.success({ songs: { items: songs, total, next } }))
     }
   } catch (err) {
-    console.error(err)
+    dispatch(loadSongsActions.failure(err))
   }
 }
 
 export const fetchVideo = ({ song, artists, album }) => async dispatch => {
+  dispatch(loadVideoActions.request())
   const artistNames = artists.map(({ name }) => name).join(' ')
   const terms = `${song} ${artistNames}`.split('undefined').filter(item => !!item).join(' ')
   try {
@@ -88,7 +91,6 @@ export const fetchUser = (token) => async dispatch => {
     const res = await fetch(req)
     const { id, error } = await res.json()
     if (error) {
-      console.log(error)
       authorize()
     } else {
       dispatch(loadUserActions.success({ id }))
@@ -98,4 +100,4 @@ export const fetchUser = (token) => async dispatch => {
   }
 }
 
-export const setToken = token => dispatch => dispatch({ type: 'SET_TOKEN', payload: { token } })
+export const setToken = token => dispatch => dispatch({ type: SET_TOKEN, payload: { token } })

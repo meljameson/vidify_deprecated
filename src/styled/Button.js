@@ -2,14 +2,14 @@ import styled from 'styled-components'
 
 export const DefaultButton = styled.button`
 text-align: center;   
-background-color: #1db954;
+background-color: pink;
 transition-duration: .3s;
 border-width: 0;
 text-transform: uppercase;
-color: #fff;
+color: #000;
 cursor: pointer;
 &:hover {
-  background-color: #1ed760;
+  background-color: pink;
 }
 &:focus {
   outline: none;
