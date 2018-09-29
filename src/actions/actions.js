@@ -65,7 +65,7 @@ export const fetchVideo = ({ song, artists, album }) => async dispatch => {
       part: 'snippet',
       q: terms,
     })
-    const result = await fetch(`https://proxy-216604.appspot.com/api/youtube?${query}`, {
+    const result = await fetch(`/api/youtube?${query}`, {
       headers: {
         'Content-Type': 'application/json'
       }

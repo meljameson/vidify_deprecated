@@ -26,7 +26,7 @@
     "yt-player": "meljameson/yt-player#master"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=production REACT_APP_CALLBACK=https://meljameson.gitlab.io/vidify/ node server",
+    "start": "cross-env NODE_ENV=production node server",
     "dev": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",

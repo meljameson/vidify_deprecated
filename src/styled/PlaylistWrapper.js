@@ -6,5 +6,7 @@ grid-area: playlist;
 display: flex;
 flex-direction: column;
 overflow: auto;
-border-left: 1px solid white;
+@media (min-width: 1025px) {
+  border-left: 1px solid white;
+}
 `
