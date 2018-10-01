@@ -1,15 +1,10 @@
-import { SET_TOKEN, FETCH_USER } from '../actions/actions'
+import { FETCH_USER } from '../actions'
 import { createReducer } from '../utils'
 
 const auth = createReducer({
   isFetching: false,
   error: false
 }, {
-    [SET_TOKEN]: (state, action) => {
-      return Object.assign({}, state, {
-        token: action.payload.token
-      })
-    },
     [FETCH_USER.REQUEST]: (state, action) => {
       return {
         ...state,

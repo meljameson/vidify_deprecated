@@ -1,4 +1,4 @@
-import { FETCH_VIDEO } from '../actions/actions'
+import { FETCH_VIDEO } from '../actions'
 import { createReducer } from '../utils'
 
 const video = createReducer({
