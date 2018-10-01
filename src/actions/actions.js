@@ -1,55 +1,46 @@
-import { buildQuery, createActionTypes, authorize, findMatch, createActions } from '../utils'
+import { buildQuery, createActionTypes, findMatch, createActions } from '../utils'
 
 export const FETCH_PLAYLISTS = createActionTypes('FETCH_PLAYLISTS')
 export const FETCH_SONGS = createActionTypes('FETCH_SONGS')
 export const FETCH_VIDEO = createActionTypes('FETCH_VIDEO')
 export const FETCH_USER = createActionTypes('FETCH_USER')
-export const SET_TOKEN = 'SET_TOKEN'
 
 const loadPlaylistsActions = createActions(FETCH_PLAYLISTS)
 const loadSongsActions = createActions(FETCH_SONGS)
 const loadVideoActions = createActions(FETCH_VIDEO)
 const loadUserActions = createActions(FETCH_USER)
 
-export const fetchPlaylists = (userId, token) => async dispatch => {
+export const fetchPlaylists = () => async dispatch => {
   dispatch(loadPlaylistsActions.request())
-  const req = new Request(`https://api.spotify.com/v1/users/${userId}/playlists`, { // TODO: add auth header in proxy
-    headers: new Headers({
-      'Authorization': 'Bearer ' + token
-    })
-  })
-
   try {
-    const res = await fetch(req)
+    const res = await fetch('/api/playlists', { // attach headers in the proxy
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
     const { total, next, items, error } = await res.json()
-    if (error) { // TODO: check for actual authentication error
-      authorize()
-    } else {
-      const playlists = items.map(({ id, images, name, tracks: { total } }) => ({ id, image: images.pop().url, name, total }))
-      dispatch(loadPlaylistsActions.success({ playlists: { items: playlists, total, next } }))
-    }
+    if (error) throw new Error(error)
+    const playlists = items.map(({ id, images, name, tracks: { total } }) => ({ id, image: images.pop().url, name, total }))
+    dispatch(loadPlaylistsActions.success({ playlists: { items: playlists, total, next } }))
   } catch (err) {
     dispatch(loadPlaylistsActions.failure(err))
   }
 }
 
-export const fetchSongs = (userId, token, playlistId) => async dispatch => {
+export const fetchSongs = playlistId => async dispatch => {
   dispatch(loadSongsActions.request())
-  const req = new Request(`https://api.spotify.com/v1/users/${userId}/playlists/${playlistId}/tracks`, {
-    headers: new Headers({
-      'Authorization': 'Bearer ' + token
-    })
-  })
-
   try {
-    const res = await fetch(req)
+    const res = await fetch(`/api/songs?playlistId=${playlistId}`, { // attach headers in the proxy
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
     const { total, next, items, error } = await res.json()
-    if (error) {
-      authorize()
-    } else {
-      const songs = items.map(({ track: { id, name, artists, album: { images, name: album } } }) => ({ id, name, artists, images, album }))
-      dispatch(loadSongsActions.success({ songs: { items: songs, total, next } }))
-    }
+    if (error) throw new Error(error)
+    const songs = items.map(({ track: { id, name, artists, album: { images, name: album } } }) => ({ id, name, artists, images, album }))
+    dispatch(loadSongsActions.success({ songs: { items: songs, total, next } }))
   } catch (err) {
     dispatch(loadSongsActions.failure(err))
   }
@@ -78,26 +69,24 @@ export const fetchVideo = ({ song, artists, album }) => async dispatch => {
   }
 }
 
-export const fetchUser = (token) => async dispatch => {
+export const fetchUser = () => async dispatch => {
   dispatch(loadUserActions.request)
-
-  const req = new Request('https://api.spotify.com/v1/me', {
-    headers: new Headers({
-      'Authorization': 'Bearer ' + token
-    })
-  })
-
   try {
-    const res = await fetch(req)
-    const { id, error } = await res.json()
-    if (error) {
-      authorize()
-    } else {
-      dispatch(loadUserActions.success({ id }))
-    }
+    await fetch('/api/auth', {
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    const res = await fetch('/api/me', {
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    const { id } = await res.json()
+    dispatch(loadUserActions.success({ id }))
   } catch (err) {
     dispatch(loadUserActions.failure(err))
   }
 }
-
-export const setToken = token => dispatch => dispatch({ type: SET_TOKEN, payload: { token } })

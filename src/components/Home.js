@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { Main } from '../styled'
-import { getToken } from '../utils'
 import { connect } from 'react-redux'
-import { fetchUser, setToken } from '../actions/actions'
+import { fetchUser } from '../actions'
 import { selectAuth } from '../selectors/selectors'
 import Player from './Player'
 import Login from './Login'
@@ -12,16 +11,6 @@ import Loading from './Loading'
 class Home extends Component {
   state = {
     currentSong: null
-  }
-
-  componentWillMount() {
-    const { token, setToken } = this.props
-    if (!token) setToken(getToken())
-  }
-
-  componentDidUpdate() {
-    const { user, fetchUser, token } = this.props
-    if (!user && token) fetchUser(token)
   }
 
   changeCurrentSong = (id) => {
@@ -43,14 +32,13 @@ class Home extends Component {
 }
 
 const mapStateToProps = state => {
-  const { user, token, isFetching, error } = selectAuth(state)
+  const { user, isFetching, error } = selectAuth(state)
 
   return {
     user,
-    token,
     isFetching,
     error
   }
 }
 
-export default connect(mapStateToProps, { fetchUser, setToken })(Home)
+export default connect(mapStateToProps, { fetchUser })(Home)

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Row, Title, PlaylistButton, List, PlaylistWrapper, Header, Album, FlexContainer } from '../styled'
-import { fetchSongs, fetchPlaylists, fetchVideo, fetchUser } from '../actions/actions'
+import { fetchSongs, fetchPlaylists, fetchVideo, fetchUser } from '../actions'
 import { selectSongs, selectPlaylists, selectAuth, selectVideo } from '../selectors/selectors'
 import { connect } from 'react-redux'
 import Loading from './Loading'
@@ -12,8 +12,8 @@ class Playlist extends Component {
   }
 
   componentDidMount() {
-    const { user, token, fetchPlaylists, playlists } = this.props
-    if (token && user && !playlists) fetchPlaylists(user, token)
+    const { user, fetchPlaylists, playlists } = this.props
+    if (user && !playlists) fetchPlaylists()
   }
 
   componentDidUpdate({ songs: prevSongs }) {
@@ -53,7 +53,7 @@ class Playlist extends Component {
         this.setState({ currentPlaylist: name })
         this.toggleShowSongs()
         this.props.changeCurrentSong(null)
-        this.props.fetchSongs(this.props.userId, this.props.token, id)
+        this.props.fetchSongs(id)
       }}
     >
       <Album alt={`${name} album art`} src={image} />
@@ -97,7 +97,7 @@ class Playlist extends Component {
 }
 
 const mapStateToProps = state => {
-  const { user, token, isFetching: authFetching, error: authError } = selectAuth(state) // ew
+  const { user, isFetching: authFetching, error: authError } = selectAuth(state) // ew
   const { items: songs, isFetching: songFetching, error: songError } = selectSongs(state) // ew
   const { items: playlists, isFetching: playlistFetching, error: playlistError } = selectPlaylists(state) // ew
   const { id: video, isFetching: videoFetching, error: videoError } = selectVideo(state) // ew
@@ -106,7 +106,6 @@ const mapStateToProps = state => {
 
   return {
     user,
-    token,
     songs,
     video,
     playlists,
