@@ -13,6 +13,10 @@ class Home extends Component {
     currentSong: null
   }
 
+  componentDidMount() {
+    if (!this.props.user) this.props.fetchUser()
+  }
+
   changeCurrentSong = (id) => {
     this.setState({ currentSong: id })
   }

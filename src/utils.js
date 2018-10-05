@@ -1,9 +1,11 @@
-export const buildQuery = (params) => (typeof params === 'object') ? (
-  Object.keys(params).map(key => Array.isArray(params[key])
-    ? params[key].map(value => `${key}=` + value).join('&')
-    : `${key}=` + params[key]
-  ).join('&')
-) : `${params}`
+export function buildQuery(params) {
+  return (typeof params === 'object') ? (
+    Object.keys(params).map(key => Array.isArray(params[key])
+      ? params[key].map(value => `${key}=` + value).join('&')
+      : `${key}=` + params[key]
+    ).join('&')
+  ) : `${params}`
+}
 
 export function createActionTypes(action) {
   return ['REQUEST', 'SUCCESS', 'FAILURE'].reduce((acc = {}, val) => {
