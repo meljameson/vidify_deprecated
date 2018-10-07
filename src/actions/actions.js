@@ -77,7 +77,6 @@ export const fetchUser = () => async dispatch => {
   dispatch(loadUserActions.request())
   try {
     const res = await fetch(`${server}/api/me`, {
-      mode: 'no-cors',
       credentials: 'include',
       headers: {
         'Accept': 'application/json'
