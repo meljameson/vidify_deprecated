@@ -15,7 +15,7 @@ const login = createActions(LOGIN)
 export const fetchPlaylists = () => async dispatch => {
   dispatch(loadPlaylistsActions.request())
   try {
-    const res = await fetch(`${base_url}/api/playlists`, {
+    const res = await fetch(`${server}/api/playlists`, {
       mode: 'no-cors',
       headers: {
         'Content-Type': 'application/json',
