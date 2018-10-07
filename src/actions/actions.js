@@ -72,7 +72,7 @@ export const fetchVideo = ({ song, artists, album }) => async dispatch => {
 }
 
 export const fetchUser = () => async dispatch => {
-  dispatch(loadUserActions.request)
+  dispatch(loadUserActions.request())
   try {
     const res = await fetch('https://proxy-216604.appspot.com/api/me', {
       mode: 'no-cors',
@@ -89,8 +89,9 @@ export const fetchUser = () => async dispatch => {
 }
 
 export const authenticate = () => async dispatch => {
-  dispatch(login.request)
+  dispatch(login.request())
   try {
+    console.log(1)
     const res = await fetch('https://proxy-216604.appspot.com/api/login', {
       mode: 'no-cors',
       credentials: 'include',
@@ -98,7 +99,9 @@ export const authenticate = () => async dispatch => {
         'Accept': 'application/json'
       }
     })
+    console.log('res', res)
     const { url } = await res.json()
+    console.log('url', url)
     if (url) window.location.href = url
   } catch (err) {
     dispatch(login.failure(err))
