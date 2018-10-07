@@ -103,8 +103,9 @@ export const authenticate = () => async dispatch => {
     console.log('res', res)
     const { url } = await res.json()
     console.log('url', url)
-    if (url) window.location.href = url
+    // window.location.href = url
   } catch (err) {
+    console.log(err)
     dispatch(login.failure(err))
   }
 }
