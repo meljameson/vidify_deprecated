@@ -83,7 +83,10 @@ export const fetchUser = () => async dispatch => {
         'Accept': 'application/json'
       }
     })
-    const { id } = await res.json()
+    console.log(res)
+    console.log(res.json())
+    const { id, url } = await res.json()
+    if (url) window.location.href = url
     if (id) dispatch(loadUserActions.success({ id }))
   } catch (err) {
     dispatch(loadUserActions.failure(err))
