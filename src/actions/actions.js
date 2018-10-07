@@ -1,4 +1,4 @@
-import { buildQuery, createActionTypes, findMatch, createActions } from '../utils'
+import { server, buildQuery, createActionTypes, findMatch, createActions } from '../utils'
 
 export const FETCH_PLAYLISTS = createActionTypes('FETCH_PLAYLISTS')
 export const FETCH_SONGS = createActionTypes('FETCH_SONGS')
@@ -15,10 +15,11 @@ const login = createActions(LOGIN)
 export const fetchPlaylists = () => async dispatch => {
   dispatch(loadPlaylistsActions.request())
   try {
-    const res = await fetch('https://proxy-216604.appspot.com/api/playlists', {
+    const res = await fetch(`${base_url}/api/playlists`, {
       mode: 'no-cors',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        credentials: 'include',
       }
     })
     const { total, next, items, error } = await res.json()
@@ -33,10 +34,11 @@ export const fetchPlaylists = () => async dispatch => {
 export const fetchSongs = playlistId => async dispatch => {
   dispatch(loadSongsActions.request())
   try {
-    const res = await fetch(`https://proxy-216604.appspot.com/api/songs?playlistId=${playlistId}`, {
+    const res = await fetch(`${server}/api/songs?playlistId=${playlistId}`, {
       mode: 'no-cors',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        credentials: 'include',
       }
     })
     const { total, next, items, error } = await res.json()
@@ -58,7 +60,7 @@ export const fetchVideo = ({ song, artists, album }) => async dispatch => {
       part: 'snippet',
       q: terms,
     })
-    const result = await fetch(`https://proxy-216604.appspot.com/api/youtube?${query}`, {
+    const result = await fetch(`${server}/api/youtube?${query}`, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -74,7 +76,7 @@ export const fetchVideo = ({ song, artists, album }) => async dispatch => {
 export const fetchUser = () => async dispatch => {
   dispatch(loadUserActions.request())
   try {
-    const res = await fetch('https://proxy-216604.appspot.com/api/me', {
+    const res = await fetch(`${server}/api/me`, {
       mode: 'no-cors',
       credentials: 'include',
       headers: {
@@ -91,8 +93,7 @@ export const fetchUser = () => async dispatch => {
 export const authenticate = () => async dispatch => {
   dispatch(login.request())
   try {
-    console.log(1)
-    const res = await fetch('https://proxy-216604.appspot.com/api/login', {
+    const res = await fetch(`${server}/api/login`, {
       mode: 'no-cors',
       credentials: 'include',
       headers: {
