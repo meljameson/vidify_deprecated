@@ -41,4 +41,4 @@ export function createReducer(initialState, handlers) {
   }
 }
 
-export const server = process.env.NODE_ENV == 'production' ? 'https://proxy-216604.appspot.com' : ''
+export const server = process.env.NODE_ENV === 'production' ? 'https://proxy-216604.appspot.com' : ''
