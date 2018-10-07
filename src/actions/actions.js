@@ -16,7 +16,6 @@ export const fetchPlaylists = () => async dispatch => {
   dispatch(loadPlaylistsActions.request())
   try {
     const res = await fetch(`${server}/api/playlists`, {
-      mode: 'no-cors',
       headers: {
         'Content-Type': 'application/json',
         credentials: 'include',
@@ -35,7 +34,6 @@ export const fetchSongs = playlistId => async dispatch => {
   dispatch(loadSongsActions.request())
   try {
     const res = await fetch(`${server}/api/songs?playlistId=${playlistId}`, {
-      mode: 'no-cors',
       headers: {
         'Content-Type': 'application/json',
         credentials: 'include',
@@ -76,16 +74,14 @@ export const fetchVideo = ({ song, artists, album }) => async dispatch => {
 export const fetchUser = () => async dispatch => {
   dispatch(loadUserActions.request())
   try {
-    const res = await fetch(`${server}/api/me`, {
+    const res = await (await fetch(`${server}/api/me`, {
       credentials: 'include',
       headers: {
         'Accept': 'application/json'
       }
-    })
+    })).json()
     console.log(res)
-    console.log(res.json())
-    const { id, url } = await res.json()
-    if (url) window.location.href = url
+    const { id } = res
     if (id) dispatch(loadUserActions.success({ id }))
   } catch (err) {
     dispatch(loadUserActions.failure(err))
@@ -95,18 +91,14 @@ export const fetchUser = () => async dispatch => {
 export const authenticate = () => async dispatch => {
   dispatch(login.request())
   try {
-    const res = await fetch(`${server}/api/login`, {
+    const { url } = await (await fetch(`${server}/api/login`, {
       credentials: 'include',
       headers: {
         'Accept': 'application/json'
       }
-    })
-    console.log('res', res)
-    const { url } = await res.json()
-    console.log('url', url)
-    window.location.href = url
+    })).json()
+    if (url) window.location.href = url
   } catch (err) {
-    console.log(err)
     dispatch(login.failure(err))
   }
 }

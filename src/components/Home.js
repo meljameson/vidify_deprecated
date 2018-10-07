@@ -17,7 +17,7 @@ class Home extends Component {
     if (!this.props.user) this.props.fetchUser()
   }
 
-  changeCurrentSong = (id) => {
+  changeCurrentSong = id => {
     this.setState({ currentSong: id })
   }
 

@@ -10,7 +10,7 @@ server.get('/', function (req, res) {
 })
 
 server.use(proxy('/api', {
-  target: 'https://proxy-216604.appspot.com',
+  target: process.env.REACT_APP_PROD_URL,
   changeOrigin: true
 }))
 
