@@ -77,7 +77,6 @@ export const fetchUser = () => async dispatch => {
   dispatch(loadUserActions.request())
   try {
     const res = await fetch(`${server}/api/me`, {
-      mode: 'no-cors',
       credentials: 'include',
       headers: {
         'Accept': 'application/json'
@@ -94,7 +93,6 @@ export const authenticate = () => async dispatch => {
   dispatch(login.request())
   try {
     const res = await fetch(`${server}/api/login`, {
-      mode: 'no-cors',
       credentials: 'include',
       headers: {
         'Accept': 'application/json'
@@ -103,7 +101,7 @@ export const authenticate = () => async dispatch => {
     console.log('res', res)
     const { url } = await res.json()
     console.log('url', url)
-    // window.location.href = url
+    window.location.href = url
   } catch (err) {
     console.log(err)
     dispatch(login.failure(err))
