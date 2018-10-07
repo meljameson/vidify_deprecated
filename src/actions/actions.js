@@ -16,9 +16,9 @@ export const fetchPlaylists = () => async dispatch => {
   dispatch(loadPlaylistsActions.request())
   try {
     const res = await fetch(`${server}/api/playlists`, {
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        credentials: 'include',
       }
     })
     const { total, next, items, error } = await res.json()
@@ -34,9 +34,9 @@ export const fetchSongs = playlistId => async dispatch => {
   dispatch(loadSongsActions.request())
   try {
     const res = await fetch(`${server}/api/songs?playlistId=${playlistId}`, {
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        credentials: 'include',
       }
     })
     const { total, next, items, error } = await res.json()
