@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Main } from '../styled'
 import { connect } from 'react-redux'
 import { fetchUser } from '../actions'
-import { selectAuth } from '../selectors'
+import { selectUser } from '../selectors'
 import Player from './Player'
 import Login from './Login'
 import Playlist from './Playlist'
@@ -28,7 +28,7 @@ class Home extends Component {
 }
 
 const mapStateToProps = state => {
-  const { user, error, isFetching } = selectAuth(state)
+  const { user, error, isFetching } = selectUser(state)
 
   return {
     user,

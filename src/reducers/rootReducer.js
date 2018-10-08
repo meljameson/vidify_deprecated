@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux'
 import songs from './songs'
 import playlists from './playlists'
-import auth from './auth'
+import user from './user'
 import video from './video'
 
 const rootReducer = combineReducers({
-  auth,
+  user,
   playlists,
   songs,
   video

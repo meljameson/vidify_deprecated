@@ -1,7 +1,7 @@
 import { FETCH_USER } from '../actions'
 import { createReducer } from '../utils'
 
-const auth = createReducer({
+const user = createReducer({
   isFetching: false,
   error: false,
   currentPlaylist: null,
@@ -42,4 +42,4 @@ const auth = createReducer({
     }
   })
 
-export default auth
+export default user
