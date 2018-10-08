@@ -2,43 +2,38 @@ import React, { Component } from 'react'
 import { Main } from '../styled'
 import { connect } from 'react-redux'
 import { fetchUser } from '../actions'
-import { selectAuth } from '../selectors/selectors'
+import { selectAuth } from '../selectors'
 import Player from './Player'
 import Login from './Login'
 import Playlist from './Playlist'
+import Loading from './Loading'
 
 class Home extends Component {
-  state = {
-    currentSong: null
-  }
-
   componentDidMount() {
     if (!this.props.user) this.props.fetchUser()
   }
 
-  changeCurrentSong = id => {
-    this.setState({ currentSong: id })
-  }
-
   render() {
-    const { user } = this.props
+    const { user, isFetching } = this.props
     return (
-      user ? (
-        <Main>
-          <Player />
-          <Playlist changeCurrentSong={this.changeCurrentSong} currentSong={this.state.currentSong} />
-        </Main >
-      ) : <Login />
+      isFetching ? <Loading /> :
+        user ? (
+          <Main>
+            <Player />
+            <Playlist />
+          </Main >
+        ) : <Login />
     )
   }
 }
 
 const mapStateToProps = state => {
-  const { user, error } = selectAuth(state)
+  const { user, error, isFetching } = selectAuth(state)
 
   return {
     user,
-    error
+    error,
+    isFetching
   }
 }
 

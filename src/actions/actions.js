@@ -45,6 +45,7 @@ export const fetchSongs = playlistId => async dispatch => {
     if (error) throw new Error(error)
     const songs = items.map(({ track: { id, name, artists, album: { images, name: album } } }) => ({ id, name, artists, images, album }))
     if (songs) {
+      dispatch(fetchVideo(songs[0]))
       dispatch(loadSongsActions.success({ songs: { items: songs, total, next } }))
     } else {
       throw new Error('Songs not found')
@@ -118,3 +119,7 @@ export const authenticate = () => async dispatch => {
     dispatch(login.failure(err))
   }
 }
+
+export const setSong = id => ({ type: 'SET_SONG', payload: { id } })
+
+export const setPlaylist = id => ({ type: 'SET_PLAYLIST', payload: { id } })

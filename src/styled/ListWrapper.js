@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const PlaylistWrapper = styled.div`
+export const ListWrapper = styled.div`
 max-height: 100%;
 grid-area: playlist;
 display: flex;

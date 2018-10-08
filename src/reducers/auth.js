@@ -3,7 +3,9 @@ import { createReducer } from '../utils'
 
 const auth = createReducer({
   isFetching: false,
-  error: false
+  error: false,
+  currentPlaylist: null,
+  currentSong: null
 }, {
     [FETCH_USER.REQUEST]: (state, action) => {
       return {
@@ -24,6 +26,18 @@ const auth = createReducer({
         ...state,
         isFetching: false,
         error: true
+      }
+    },
+    'SET_SONG': (state, action) => {
+      return {
+        ...state,
+        currentSong: action.payload.id
+      }
+    },
+    'SET_PLAYLIST': (state, action) => {
+      return {
+        ...state,
+        currentPlaylist: action.payload.id
       }
     }
   })
