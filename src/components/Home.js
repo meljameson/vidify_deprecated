@@ -6,7 +6,6 @@ import { selectAuth } from '../selectors/selectors'
 import Player from './Player'
 import Login from './Login'
 import Playlist from './Playlist'
-import Loading from './Loading'
 
 class Home extends Component {
   state = {
@@ -22,25 +21,23 @@ class Home extends Component {
   }
 
   render() {
-    const { isFetching = true, user } = this.props
+    const { user } = this.props
     return (
-      isFetching ? <Loading>Loading user profile...</Loading> :
-        user ? (
-          <Main>
-            <Player />
-            <Playlist changeCurrentSong={this.changeCurrentSong} currentSong={this.state.currentSong} />
-          </Main >
-        ) : <Login />
+      user ? (
+        <Main>
+          <Player />
+          <Playlist changeCurrentSong={this.changeCurrentSong} currentSong={this.state.currentSong} />
+        </Main >
+      ) : <Login />
     )
   }
 }
 
 const mapStateToProps = state => {
-  const { user, isFetching, error } = selectAuth(state)
+  const { user, error } = selectAuth(state)
 
   return {
     user,
-    isFetching,
     error
   }
 }

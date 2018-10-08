@@ -15,17 +15,19 @@ const login = createActions(LOGIN)
 export const fetchPlaylists = () => async dispatch => {
   dispatch(loadPlaylistsActions.request())
   try {
-    const res = await (await fetch(`${server}/api/playlists`, {
+    const { total, next, items, error } = await (await fetch(`${server}/api/playlists`, {
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       }
     })).json()
-    console.log(res)
-    const { total, next, items, error } = res
     if (error) throw new Error(error)
     const playlists = items.map(({ id, images, name, tracks: { total } }) => ({ id, image: images.pop().url, name, total }))
-    dispatch(loadPlaylistsActions.success({ playlists: { items: playlists, total, next } }))
+    if (playlists) {
+      dispatch(loadPlaylistsActions.success({ playlists: { items: playlists, total, next } }))
+    } else {
+      throw new Error('Playlists not found')
+    }
   } catch (err) {
     dispatch(loadPlaylistsActions.failure(err))
   }
@@ -42,7 +44,11 @@ export const fetchSongs = playlistId => async dispatch => {
     })).json()
     if (error) throw new Error(error)
     const songs = items.map(({ track: { id, name, artists, album: { images, name: album } } }) => ({ id, name, artists, images, album }))
-    dispatch(loadSongsActions.success({ songs: { items: songs, total, next } }))
+    if (songs) {
+      dispatch(loadSongsActions.success({ songs: { items: songs, total, next } }))
+    } else {
+      throw new Error('Songs not found')
+    }
   } catch (err) {
     dispatch(loadSongsActions.failure(err))
   }
@@ -64,7 +70,11 @@ export const fetchVideo = ({ song, artists, album }) => async dispatch => {
       }
     })).json()
     const video = findMatch(items, artistNames)
-    if (video) dispatch(loadVideoActions.success({ video }))
+    if (video) {
+      dispatch(loadVideoActions.success({ video }))
+    } else {
+      throw new Error('Video not found')
+    }
   } catch (err) {
     dispatch(loadVideoActions.failure(err))
   }
@@ -79,7 +89,11 @@ export const fetchUser = () => async dispatch => {
         'Accept': 'application/json'
       }
     })).json()
-    if (id) dispatch(loadUserActions.success({ id }))
+    if (id) {
+      dispatch(loadUserActions.success({ id }))
+    } else {
+      throw new Error('User could not be loaded')
+    }
   } catch (err) {
     dispatch(loadUserActions.failure(err))
   }
@@ -94,7 +108,12 @@ export const authenticate = () => async dispatch => {
         'Accept': 'application/json'
       }
     })).json()
-    if (url) window.location.href = url
+    if (url) {
+      dispatch(login.success())
+      window.location.href = url
+    } else {
+      throw new Error('Could not authenticate')
+    }
   } catch (err) {
     dispatch(login.failure(err))
   }
