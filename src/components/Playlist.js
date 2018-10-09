@@ -1,62 +1,53 @@
 import React, { Component } from 'react'
-import { Row, Title, List, ListWrapper, Album, FlexContainer } from '../styled'
-import { fetchPlaylists, setPlaylist } from '../actions'
+import { Row, Title, List, ListWrapper, Album } from '../styled'
+import { fetchPlaylists, fetchSongs, setPlaylist } from '../actions'
 import { selectPlaylists, selectCurrentPlaylist } from '../selectors'
 import { connect } from 'react-redux'
-import Loading from './Loading'
 import SongList from './SongList'
+import WithLoading from './WithLoading'
 
 class Playlist extends Component {
   componentDidMount() {
-    if (!this.props.playlists) this.props.fetchPlaylists()
+    if (!this.props.items) this.props.fetchPlaylists()
   }
 
-  renderPlaylists = (playlists = []) => (
-    playlists.map(({ name, image, id, total }) => (
+  renderPlaylists = (items = []) => (
+    items.map(({ name, image, id, total }) => (
       <Row
         key={id}
-        onClick={() => this.props.setPlaylist(id)}
+        onClick={() => {
+          this.props.setPlaylist({ id, name })
+          this.props.fetchSongs(id)
+        }}
       >
         <Album alt={`${name} album art`} src={image} />
         <Title>{name}</Title>
-      </Row>
+      </Row >
     ))
   )
 
   showPlaylists = () => this.props.setPlaylist(null)
 
   render() {
-    const { playlists, isFetching, error, currentPlaylist } = this.props
+    const { items, currentPlaylist } = this.props
 
     return (
-      error
-        ? <FlexContainer>Error loading request</FlexContainer>
-        : isFetching
-          ? <Loading>Loading playlists...</Loading>
-          : (
-            <ListWrapper>
-              <List>
-                {
-                  currentPlaylist
-                    ? <SongList showPlaylists={this.showPlaylists} />
-                    : this.renderPlaylists(playlists)
-                }
-              </List>
-            </ListWrapper>
-          )
+      <ListWrapper>
+        <List>
+          {
+            currentPlaylist
+              ? <SongList currentPlaylist={currentPlaylist} showPlaylists={this.showPlaylists} />
+              : this.renderPlaylists(items)
+          }
+        </List>
+      </ListWrapper>
     )
   }
 }
 
-const mapStateToProps = state => {
-  const { items: playlists, isFetching, error } = selectPlaylists(state)
+const mapStateToProps = state => ({
+  ...selectPlaylists(state),
+  currentPlaylist: selectCurrentPlaylist(state)
+})
 
-  return {
-    playlists,
-    isFetching,
-    error,
-    currentPlaylist: selectCurrentPlaylist(state)
-  }
-}
-
-export default connect(mapStateToProps, { fetchPlaylists, setPlaylist })(Playlist)
+export default connect(mapStateToProps, { fetchPlaylists, fetchSongs, setPlaylist })(WithLoading(Playlist))

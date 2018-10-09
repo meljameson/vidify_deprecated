@@ -15,7 +15,7 @@ export function createActionTypes(action) {
 }
 
 // TODO: make smarter matches, dumb but functional right now
-export function findMatch(videos, artistNames) {
+export function pickVideo(videos, artistNames) {
   const video = videos.find(({ snippet, id }) => {
     const text = (`${snippet.title}  ${snippet.description}`).toLowerCase()
     return text.includes('official') || snippet.channelTitle.includes(artistNames) || id.kind.split('#').pop() === 'video'
@@ -42,3 +42,10 @@ export function createReducer(initialState, handlers) {
 }
 
 export const server = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_PROD_URL : ''
+
+export const request = async (url) => await (await fetch(`${server}/api/${url}`, {
+  credentials: 'include',
+  headers: {
+    'Accept': 'application/json',
+  }
+})).json()

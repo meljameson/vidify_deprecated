@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Main } from '../styled'
 import { connect } from 'react-redux'
+import { Grid } from '../styled'
 import { fetchUser } from '../actions'
 import { selectUser } from '../selectors'
 import Player from './Player'
@@ -18,21 +18,20 @@ class Home extends Component {
     return (
       isFetching ? <Loading /> :
         user ? (
-          <Main>
+          <Grid>
             <Player />
             <Playlist />
-          </Main >
+          </Grid >
         ) : <Login />
     )
   }
 }
 
 const mapStateToProps = state => {
-  const { user, error, isFetching } = selectUser(state)
+  const { user, isFetching } = selectUser(state)
 
   return {
     user,
-    error,
     isFetching
   }
 }

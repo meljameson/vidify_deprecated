@@ -1,4 +1,4 @@
-export { Main } from './Main'
+export { Grid } from './Grid'
 export { PlayerWrapper } from './PlayerWrapper'
 export { ListWrapper } from './ListWrapper'
 export { Row } from './Row'

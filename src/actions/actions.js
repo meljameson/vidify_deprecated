@@ -1,4 +1,4 @@
-import { server, buildQuery, createActionTypes, findMatch, createActions } from '../utils'
+import { buildQuery, createActionTypes, createActions, request, pickVideo } from '../utils'
 
 export const FETCH_PLAYLISTS = createActionTypes('FETCH_PLAYLISTS')
 export const FETCH_SONGS = createActionTypes('FETCH_SONGS')
@@ -15,12 +15,7 @@ const login = createActions(LOGIN)
 export const fetchPlaylists = () => async dispatch => {
   dispatch(loadPlaylistsActions.request())
   try {
-    const { total, next, items, error } = await (await fetch(`${server}/api/playlists`, {
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })).json()
+    const { total, next, items, error } = await request(`playlists`)
     if (error) throw new Error(error)
     const playlists = items.map(({ id, images, name, tracks: { total } }) => ({ id, image: images.pop().url, name, total }))
     if (playlists) {
@@ -36,17 +31,12 @@ export const fetchPlaylists = () => async dispatch => {
 export const fetchSongs = playlistId => async dispatch => {
   dispatch(loadSongsActions.request())
   try {
-    const { total, next, items, error } = await (await fetch(`${server}/api/songs?playlistId=${playlistId}`, {
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })).json()
+    const { total, next, items, error } = await request(`songs?playlistId=${playlistId}`)
     if (error) throw new Error(error)
     const songs = items.map(({ track: { id, name, artists, album: { images, name: album } } }) => ({ id, name, artists, images, album }))
     if (songs) {
-      dispatch(fetchVideo(songs[0]))
       dispatch(loadSongsActions.success({ songs: { items: songs, total, next } }))
+      dispatch(fetchVideo(songs[0]))
     } else {
       throw new Error('Songs not found')
     }
@@ -55,22 +45,18 @@ export const fetchSongs = playlistId => async dispatch => {
   }
 }
 
-export const fetchVideo = ({ song, artists, album }) => async dispatch => {
+export const fetchVideo = ({ name, artists, album }) => async dispatch => {
   dispatch(loadVideoActions.request())
   const artistNames = artists.map(({ name }) => name).join(' ')
-  const terms = `${song} ${artistNames}`.split('undefined').filter(item => !!item).join(' ')
+  const terms = `${name} ${artistNames}`.split('undefined').filter(item => !!item).join(' ')
   try {
     const query = buildQuery({
       maxResults: 5,
       part: 'snippet',
       q: terms,
     })
-    const { items } = await (await fetch(`${server}/api/youtube?${query}`, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })).json()
-    const video = findMatch(items, artistNames)
+    const { items } = await request(`youtube?${query}`)
+    const video = pickVideo(items, artistNames)
     if (video) {
       dispatch(loadVideoActions.success({ video }))
     } else {
@@ -84,12 +70,7 @@ export const fetchVideo = ({ song, artists, album }) => async dispatch => {
 export const fetchUser = () => async dispatch => {
   dispatch(loadUserActions.request())
   try {
-    const { id } = await (await fetch(`${server}/api/me`, {
-      credentials: 'include',
-      headers: {
-        'Accept': 'application/json'
-      }
-    })).json()
+    const { id } = await request(`me`)
     if (id) {
       dispatch(loadUserActions.success({ id }))
     } else {
@@ -103,12 +84,8 @@ export const fetchUser = () => async dispatch => {
 export const authenticate = () => async dispatch => {
   dispatch(login.request())
   try {
-    const { url } = await (await fetch(`${server}/api/login`, {
-      credentials: 'include',
-      headers: {
-        'Accept': 'application/json'
-      }
-    })).json()
+    const { url } = await request(`login`)
+    console.log(url)
     if (url) {
       dispatch(login.success())
       window.location.href = url

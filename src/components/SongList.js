@@ -1,18 +1,16 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Row, PlaylistButton, List, Header, Album } from '../styled'
-import { fetchSongs, setSong, fetchVideo } from '../actions'
-import { selectSongs, selectCurrentSong, selectCurrentPlaylist } from '../selectors'
+import { setSong, fetchVideo } from '../actions'
+import { selectSongs, selectCurrentSong } from '../selectors'
+import WithLoading from './WithLoading'
 
 class SongList extends Component {
-  componentDidMount() {
-    const { currentPlaylist, fetchSongs } = this.props
-    if (currentPlaylist) fetchSongs(currentPlaylist)
-  }
+  isCurrentSong = (i, id) => (!this.props.currentSong && i === 0) || (id === this.props.currentSong)
 
-  renderSongs = (songs = []) => (
-    songs.map(({ name, id, artists, album, images }, i) => {
-      let style = ((!this.props.currentSong && i === 0) || (id === this.props.currentSong))
+  renderSongs = (items = []) => (
+    items.map(({ name, id, artists, album, images }, i) => {
+      let style = this.isCurrentSong(i, id)
         ? { backgroundColor: '#1db954' }
         : {}
       return (
@@ -32,31 +30,21 @@ class SongList extends Component {
   )
 
   render() {
-    const { songs, showPlaylists, playlist } = this.props
+    const { items, showPlaylists, currentPlaylist } = this.props
 
     return (
       <>
         {
           <Header>
-            <div
-              style={{
-                paddingBottom: '1rem',
-                textAlign: 'center',
-                fontWeight: 'bold',
-                overflow: 'hidden',
-                whiteSpace: 'nowrap',
-                textOverflow: 'ellipsis'
-              }}>
-              {playlist}
-            </div>
+            {currentPlaylist.name}
             <PlaylistButton onClick={showPlaylists}>
               &larr;
-      </PlaylistButton>
+            </PlaylistButton>
           </Header>
         }
         <List>
           {
-            this.renderSongs(songs)
+            this.renderSongs(items)
           }
         </List>
       </>
@@ -64,16 +52,9 @@ class SongList extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  const { items: songs, isFetching, error } = selectSongs(state)
+const mapStateToProps = state => ({
+  currentSong: selectCurrentSong(state),
+  ...selectSongs(state)
+})
 
-  return {
-    songs,
-    isFetching,
-    error,
-    currentSong: selectCurrentSong(state),
-    currentPlaylist: selectCurrentPlaylist(state),
-  }
-}
-
-export default connect(mapStateToProps, { fetchSongs, setSong, fetchVideo })(SongList)
+export default connect(mapStateToProps, { setSong, fetchVideo })(WithLoading(SongList))

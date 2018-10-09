@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const Main = styled.div`
+export const Grid = styled.div`
   width: 100%;
   height: 100%;
   display: grid;

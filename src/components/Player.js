@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import * as YTPlayer from 'yt-player/lib'
 import { selectVideo } from '../selectors'
@@ -15,15 +15,13 @@ class Player extends Component {
 
   componentDidUpdate(prevProps) {
     const { id } = this.props
-    if (id && prevProps.id !== id) {
-      this.state.player.load(id)
-    }
+    if (id && prevProps.id !== id) this.state.player.load(id)
   }
 
   render() {
     const { id, error } = this.props
     return (
-      <Fragment>
+      <>
         <PlayerWrapper>
           <Video id='player'>
             {!id && (
@@ -34,17 +32,13 @@ class Player extends Component {
           </Video>
         </PlayerWrapper>
         {error && error}
-      </Fragment>
+      </>
     )
   }
 }
 
-const mapStateToProps = state => {
-  const { id, error } = selectVideo(state)
-  return {
-    id,
-    error
-  }
-}
+const mapStateToProps = state => ({
+  ...selectVideo(state)
+})
 
 export default connect(mapStateToProps)(Player)
