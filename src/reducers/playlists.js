@@ -1,31 +1,21 @@
 import { FETCH_PLAYLISTS } from '../actions'
-import { createReducer } from '../utils'
+import { createReducer, initialState, requestState, failureState } from '../utils'
 
-const playlists = createReducer({
-  isFetching: false,
-  error: false
-}, {
-    [FETCH_PLAYLISTS.REQUEST]: (state, action) => {
-      return {
-        ...state,
-        isFetching: true,
-        error: false
-      }
-    },
-    [FETCH_PLAYLISTS.SUCCESS]: (state, { payload }) => {
-      return Object.assign({}, state, {
-        ...payload.playlists,
-        isFetching: false,
-        error: false
-      })
-    },
-    [FETCH_PLAYLISTS.FAILURE]: (state, action) => {
-      return {
-        ...state,
-        isFetching: false,
-        error: true
-      }
-    }
+const playlists = createReducer(initialState, {
+  [FETCH_PLAYLISTS.REQUEST]: (state, action) => ({
+    ...state,
+    ...requestState
+  }),
+  [FETCH_PLAYLISTS.SUCCESS]: (state, { payload }) => (
+    Object.assign({}, state, {
+      ...payload.playlists,
+      ...initialState
+    })
+  ),
+  [FETCH_PLAYLISTS.FAILURE]: (state, action) => ({
+    ...state,
+    ...failureState
   })
+})
 
 export default playlists

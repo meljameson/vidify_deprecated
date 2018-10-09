@@ -1,4 +1,4 @@
-import { buildQuery, createActionTypes, createActions, request, pickVideo } from '../utils'
+import { buildQuery, createActionTypes, createActions, request, pickVideo, normalizePlaylists, normalizeSongs } from '../utils'
 
 export const FETCH_PLAYLISTS = createActionTypes('FETCH_PLAYLISTS')
 export const FETCH_SONGS = createActionTypes('FETCH_SONGS')
@@ -15,9 +15,8 @@ const login = createActions(LOGIN)
 export const fetchPlaylists = () => async dispatch => {
   dispatch(loadPlaylistsActions.request())
   try {
-    const { total, next, items, error } = await request(`playlists`)
-    if (error) throw new Error(error)
-    const playlists = items.map(({ id, images, name, tracks: { total } }) => ({ id, image: images.pop().url, name, total }))
+    const { total, next, items } = await request(`playlists`)
+    const playlists = normalizePlaylists(items)
     if (playlists) {
       dispatch(loadPlaylistsActions.success({ playlists: { items: playlists, total, next } }))
     } else {
@@ -31,9 +30,8 @@ export const fetchPlaylists = () => async dispatch => {
 export const fetchSongs = playlistId => async dispatch => {
   dispatch(loadSongsActions.request())
   try {
-    const { total, next, items, error } = await request(`songs?playlistId=${playlistId}`)
-    if (error) throw new Error(error)
-    const songs = items.map(({ track: { id, name, artists, album: { images, name: album } } }) => ({ id, name, artists, images, album }))
+    const { total, next, items } = await request(`songs?playlistId=${playlistId}`)
+    const songs = normalizeSongs(items)
     if (songs) {
       dispatch(loadSongsActions.success({ songs: { items: songs, total, next } }))
       dispatch(fetchVideo(songs[0]))

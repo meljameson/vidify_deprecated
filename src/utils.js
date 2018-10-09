@@ -49,3 +49,22 @@ export const request = async (url) => await (await fetch(`${server}/api/${url}`,
     'Accept': 'application/json',
   }
 })).json()
+
+export const normalizePlaylists = items => items.map(({ id, images, name, tracks: { total } }) => ({ id, image: images.pop().url, name, total }))
+
+export const normalizeSongs = items => items.map(({ track: { id, name, artists, album: { images, name: album } } }) => ({ id, name, artists, images, album }))
+
+export const initialState = {
+  isFetching: false,
+  error: false
+}
+
+export const requestState = {
+  isFetching: true,
+  error: false
+}
+
+export const failureState = {
+  isFetching: false,
+  error: true
+}

@@ -1,31 +1,21 @@
 import { FETCH_SONGS } from '../actions'
-import { createReducer } from '../utils'
+import { createReducer, initialState, requestState, failureState } from '../utils'
 
-const songs = createReducer({
-  isFetching: false,
-  error: false
-}, {
-    [FETCH_SONGS.REQUEST]: (state, action) => {
-      return {
-        ...state,
-        isFetching: true,
-        error: false
-      }
-    },
-    [FETCH_SONGS.SUCCESS]: (state, { payload }) => {
-      return Object.assign({}, state, {
-        ...payload.songs,
-        isFetching: false,
-        error: false
-      })
-    },
-    [FETCH_SONGS.FAILURE]: (state, action) => {
-      return {
-        ...state,
-        isFetching: false,
-        error: true
-      }
-    }
+const songs = createReducer(initialState, {
+  [FETCH_SONGS.REQUEST]: (state, action) => ({
+    ...state,
+    ...requestState
+  }),
+  [FETCH_SONGS.SUCCESS]: (state, { payload }) => (
+    Object.assign({}, state, {
+      ...payload.songs,
+      ...initialState
+    })
+  ),
+  [FETCH_SONGS.FAILURE]: (state, action) => ({
+    ...state,
+    ...failureState
   })
+})
 
 export default songs
