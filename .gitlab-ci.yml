@@ -11,7 +11,6 @@ stages:
 
 build:
   stage: build
-
   script:
     - echo "Building the app"
     - npm install
@@ -30,7 +29,8 @@ test:
 
 pages:
   stage: deploy
-  environment: staging
+  environment:
+    name: staging
   script:
     - echo "Deploy to staging server"
   only:
