@@ -1,21 +1,39 @@
-image: node:latest
+stages:
+  - test
+  - build
+  - deploy
 
-pages:
-  cache:
-    paths:
-    - node_modules/
- 
-  stage: deploy
-  
+test:
+  stage: test
+  script: 
+  - echo "Running tests"
+  - CI=true npm test
+
+build:
+  stage: build
+  image: node:latest
   script:
+    - echo "Building the app"
     - npm install
     - npm run build
     - rm -rf public
     - mv build public
 
+pages:
+  stage: deploy
+  image: node:latest
+  environment: staging
+  script:
+    - echo "Deploy to staging server"
+    - npm install
+    - npm run build
+    - rm -rf public
+    - mv build public
   artifacts:
     paths:
     - public
-    
   only:
-  - master
+  - develop
+  cache:
+    paths:
+    - node_modules/
