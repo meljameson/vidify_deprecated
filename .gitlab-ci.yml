@@ -1,34 +1,39 @@
+image: node:latest
+
+cache:
+  paths:
+    - node_modules/
+
 stages:
   - build
   - test
   - deploy
 
 build:
-    stage: build
-    image: node:latest
-    script:
-        - echo "Building the app"
-        - npm install
-        - npm run build
-        - rm -rf public
-        - mv build public
-    cache:
-        paths:
-            - node_modules/
-    artifacts:
-        paths:
-            - public
-    
+  stage: build
+
+  script:
+    - echo "Building the app"
+    - npm install
+    - npm run build
+    - rm -rf public
+    - mv build public
+  artifacts:
+    paths:
+      - public
+
 test:
-    stage: test
-    script: 
-        - echo "Running tests"
-        - CI=true npm test
+  stage: test
+  script: 
+    - echo "Running tests"
+    - CI=true npm test
 
 pages:
-    stage: deploy
-    environment: staging
-    script:
-        - echo "Deploy to staging server"
-    only:
-        - develop
+  stage: deploy
+  environment: staging
+  script:
+    - echo "Deploy to staging server"
+  only:
+    - develop
+  dependencies:
+    - build
