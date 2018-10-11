@@ -9,3 +9,5 @@ https://gitlab.com/meljameson/vidify/issues
 
 ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)
 ![Uptime Robot status](https://img.shields.io/uptimerobot/status/m780971107-d77da293faf7da0bd8d228a2.svg)
+[![pipeline status](https://gitlab.com/meljameson/vidify/badges/master/pipeline.svg)](https://gitlab.com/meljameson/vidify/commits/master)
+[![coverage report](https://gitlab.com/meljameson/vidify/badges/master/coverage.svg)](https://gitlab.com/meljameson/vidify/commits/master)
