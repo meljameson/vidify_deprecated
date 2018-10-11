@@ -29,10 +29,33 @@ test:
 
 pages:
   stage: deploy
-  environment: staging
+  environment:
+    name: staging
+    url: https://meljameson.gitlab.io/vidify/
   script:
     - echo "Deploy to staging server"
   only:
     - develop
   dependencies:
     - build
+    
+deploy_prod:
+  image: google/cloud-sdk:latest
+  stage: deploy
+  environment:
+    name: production
+    url: https://vidify-219100.appspot.com
+  script:
+    - echo "Deploy to production server"
+    - echo $DEPLOY_KEY_FILE_PRODUCTION > /tmp/$CI_PIPELINE_ID.json
+    - gcloud auth activate-service-account --key-file /tmp/$CI_PIPELINE_ID.json
+    - gcloud config set project $PROJECT_ID_PRODUCTION
+    - gcloud info
+    - gcloud --quiet app deploy
+  only:
+    - master
+  when:
+    manual
+
+after_script:
+  - rm /tmp/$CI_PIPELINE_ID.json
