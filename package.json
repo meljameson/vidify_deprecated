@@ -27,12 +27,42 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "concurrently": "^4.0.1"
+    "@google-cloud/nodejs-repo-tools": "^2.3.5",
+    "concurrently": "^4.0.1",
+    "ava": "0.25.0",
+    "supertest": "3.0.0"
   },
   "browserslist": [
     ">0.2%",
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "license": "Apache-2.0",
+  "semistandard": {
+    "globals": [
+      "after",
+      "afterEach",
+      "before",
+      "beforeEach",
+      "describe",
+      "it"
+    ]
+  },
+  "author": "Mel Jameson",
+  "cloud-repo-tools": {
+    "requiresKeyFile": true,
+    "requiresProjectId": true,
+    "test": {
+      "app": {
+        "args": [
+          "server.js"
+        ],
+        "msg": "Hello!"
+      }
+    }
+  },
+  "engines": {
+    "node": "8.x.x"
+  }
 }
