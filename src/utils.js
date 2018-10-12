@@ -41,9 +41,8 @@ export function createReducer(initialState, handlers) {
   }
 }
 
-export const server = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_PROD_URL : ''
 
-export const request = async (url) => await (await fetch(`${server}/api/${url}`, {
+export const request = async (url) => await (await fetch(`/api/${url}`, {
   credentials: 'include',
   headers: {
     'Accept': 'application/json',
