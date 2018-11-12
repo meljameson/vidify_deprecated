@@ -9,6 +9,7 @@ https://gitlab.com/meljameson/vidify/issues
 
 Bootstrapped with CRA. Utilizes Feross's yt-player module for video playback.
 
+Uses https://gitlab.com/meljameson/vidify-proxy that is currently hosted in gcloud.
 
 🔑 Feel free to use this demo account if you don't have a Spotify account to test it out
 
