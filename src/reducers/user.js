@@ -1,4 +1,4 @@
-import { FETCH_USER } from '../actions'
+import { FETCH_USER } from '../actions/user'
 import { createReducer, initialState, requestState, failureState } from '../utils'
 
 const user = createReducer({

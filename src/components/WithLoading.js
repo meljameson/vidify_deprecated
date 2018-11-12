@@ -1,6 +1,6 @@
 import React from 'react'
 import Loading from './Loading'
-import { FlexContainer } from '../styled'
+import { FlexContainer } from 'styled'
 
 const WithLoading = (Component) => ({ isFetching, error, ...props }) => {
   if (isFetching) return <Loading>Loading...</Loading>

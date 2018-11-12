@@ -1,4 +1,4 @@
-import { FETCH_SONGS } from '../actions'
+import { FETCH_SONGS } from '../actions/songs'
 import { createReducer, initialState, requestState, failureState } from '../utils'
 
 const songs = createReducer(initialState, {

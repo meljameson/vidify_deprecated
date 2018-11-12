@@ -13,4 +13,5 @@ color: white;
   background-color: #1db954;
   transition: 0.3s;
 }
+background-color: ${({ isCurrent }) => isCurrent && '#1db954'}
 `

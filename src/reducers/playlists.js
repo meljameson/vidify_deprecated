@@ -1,4 +1,4 @@
-import { FETCH_PLAYLISTS } from '../actions'
+import { FETCH_PLAYLISTS } from '../actions/playlists'
 import { createReducer, initialState, requestState, failureState } from '../utils'
 
 const playlists = createReducer(initialState, {
