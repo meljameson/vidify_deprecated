@@ -12,11 +12,11 @@ server.use(proxy('/api', {
   changeOrigin: true
 }))
 
-server.use(express.static(path.join(__dirname, '../../build')))
-console.log(path.join(__dirname, '../../build'))
+server.use(express.static(path.join(__dirname, 'build')))
+console.log(path.join(__dirname, 'build'))
 server.get('/', function (req, res) {
-  console.log(path.join(__dirname, '../../build', 'index.html'))
-  res.sendFile(path.join(__dirname, '../../build', 'index.html'))
+  console.log(path.join(__dirname, 'build', 'index.html'))
+  res.sendFile(path.join(__dirname, 'build', 'index.html'))
 })
 
 server.listen(port, () => console.log(`App listening on port ${port}`))

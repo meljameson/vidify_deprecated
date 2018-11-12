@@ -19,7 +19,7 @@
   },
   "scripts": {
     "dev": "react-scripts start",
-    "start": "npm run build && cross-env NODE_ENV=production node server/src/index",
+    "start": "npm run build && cross-env NODE_ENV=production node index.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
