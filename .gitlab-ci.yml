@@ -34,7 +34,5 @@ pages:
     url: https://meljameson.gitlab.io/vidify/
   script:
     - echo "Deploy to staging server"
-  only:
-    - develop
   dependencies:
     - build
