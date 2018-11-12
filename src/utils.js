@@ -84,7 +84,8 @@ export function createReducer(initialState, handlers) {
 * @param  {string}  url   Ex. "/auth/profile"
 * @return {object}        Server response in JSON format
 */
-export const request = async (url) => await (await fetch(`/api/${url}`, {
+export const server = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_PROD_URL : ''
+export const request = async (url) => await (await fetch(`${server}/api/${url}`, {
   credentials: 'include',
   headers: {
     'Accept': 'application/json',
