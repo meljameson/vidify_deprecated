@@ -25,4 +25,5 @@ min-width: 160px;
 export const PlaylistButton = styled(DefaultButton)` 
 font-size: 2rem;
 width: 100%;
+height: 3rem;
 `

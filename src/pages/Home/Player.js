@@ -10,29 +10,34 @@ class Player extends Component {
   }
 
   componentDidMount() {
-    this.setState({ player: new YTPlayer('#player') })
+    this.setState({
+      player: new YTPlayer('#player')
+    })
   }
 
   componentDidUpdate(prevProps) {
     const { id } = this.props
-    if (id && prevProps.id !== id) this.state.player.load(id)
+    if (id && prevProps.id !== id) this.state.player.load(id, true)
   }
 
   render() {
-    const { id, error } = this.props
+    const { id, error, isFetching } = this.props
+
     return (
-      <>
         <PlayerWrapper>
           <Video id='player'>
-            {!id && (
-              <FlexContainer>
-                <p>Pick a playlist</p>
-              </FlexContainer>
-            )}
+            {
+              (!id || error) && (
+                <FlexContainer>
+                  <p>
+                    {!isFetching && 'Pick a playlist'}
+                    {error && 'No video found'} {/* Do toast instead */}
+                  </p>
+                </FlexContainer>
+              )
+            }
           </Video>
         </PlayerWrapper>
-        {error && error}
-      </>
     )
   }
 }
