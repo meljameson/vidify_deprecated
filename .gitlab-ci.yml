@@ -1,46 +1,21 @@
- 
 image: node:latest
 
-cache:
-  paths:
+pages:
+  cache:
+    paths:
     - node_modules/
-
-stages:
-  - build
-  - test
-  - deploy
-
-build:
-  stage: build
+ 
+  stage: deploy
+  
   script:
-    - echo "Building the app"
     - npm install
     - npm run build
     - rm -rf public
     - mv build public
+
   artifacts:
     paths:
-      - public
-
-test:
-  stage: test
-  script: 
-    - echo "Running tests"
-    - CI=true npm test
-
-deploy_prod:
-  image: google/cloud-sdk:latest
-  stage: deploy
-  environment:
-    name: production
-    url: https://vidify-219100.appspot.com
-  script:
-    - echo "Deploy to production server"
-    - echo $DEPLOY_KEY_FILE_PRODUCTION > /tmp/$CI_PIPELINE_ID.json
-    - gcloud auth activate-service-account --key-file /tmp/$CI_PIPELINE_ID.json
-    - gcloud config set project $PROJECT_ID_PRODUCTION
-    - gcloud info
-    - gcloud --quiet app deploy
-
-after_script:
-  - rm /tmp/$CI_PIPELINE_ID.json
+    - public
+    
+  only:
+  - master
