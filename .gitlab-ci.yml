@@ -28,18 +28,6 @@ test:
     - echo "Running tests"
     - CI=true npm test
 
-pages:
-  stage: deploy
-  environment:
-    name: staging
-    url: https://meljameson.gitlab.io/vidify/
-  script:
-    - echo "Deploy to staging server"
-  only:
-    - develop
-  dependencies:
-    - build
-
 deploy_prod:
   image: google/cloud-sdk:latest
   stage: deploy
@@ -53,10 +41,6 @@ deploy_prod:
     - gcloud config set project $PROJECT_ID_PRODUCTION
     - gcloud info
     - gcloud --quiet app deploy
-  only:
-    - master
-  when:
-    manual
 
 after_script:
   - rm /tmp/$CI_PIPELINE_ID.json
