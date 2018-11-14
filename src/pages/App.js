@@ -6,7 +6,7 @@ import Home from 'pages/Home'
 import Login from 'pages/Login'
 import Loading from 'components/Loading'
 
-class App extends Component {
+export class App extends Component {
   componentDidMount() {
     if (!this.props.user) this.props.fetchUser()
   }
