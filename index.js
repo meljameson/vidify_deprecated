@@ -4,8 +4,13 @@ const path = require('path')
 const server = express()
 const argv = require('minimist')(process.argv.slice(2))
 
+<<<<<<< Updated upstream
 const port = process.env.PORT || argv.port || 3000
 const proxyUrl = process.env.PROXY || argv.proxy || 'https://proxy-216604.appspot.com'
+=======
+const port = process.env.PORT || 3000
+const proxyUrl = 'https://proxy-216604.appspot.com'
+>>>>>>> Stashed changes
 
 server.use(proxy('/api', {
   target: proxyUrl,
